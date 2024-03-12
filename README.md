@@ -12,6 +12,9 @@ This crate is intentionally minimal in its understanding of box content. Only `j
 
 
 ```rust
+use hex_literal::hex;
+use jumbf::parser::{DescriptionBox, SuperBox};
+
 let jumbf = hex!(
     "0000002f" // box size
     "6a756d62" // box type = 'jumb'
@@ -48,6 +51,11 @@ assert_eq!(
 This crate also allows you to build JUMBF data structures and serialize them.
 
 ```rust
+use std::io::Cursor;
+
+use hex_literal::hex;
+use jumbf::{builder::{DataBoxBuilder, SuperBoxBuilder}, BoxType};
+
 const JSON_BOX_TYPE: BoxType = BoxType(*b"json");
 const RANDOM_BOX_TYPE: BoxType = BoxType(*b"abcd");
 
