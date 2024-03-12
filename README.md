@@ -4,18 +4,73 @@ A [JUMBF (ISO/IEC 19566-5:2019)] parser and builder written in pure Rust.
 
 [![CI](https://github.com/scouten-adobe/jumbf-rs/actions/workflows/ci.yml/badge.svg)](https://github.com/scouten-adobe/jumbf-rs/actions/workflows/ci.yml)  [![Latest Version](https://img.shields.io/crates/v/jumbf.svg)](https://crates.io/crates/jumbf) [![docs.rs](https://img.shields.io/docsrs/jumbf)](https://docs.rs/jumbf/latest/jumbf/) [![codecov](https://codecov.io/gh/scouten-adobe/jumbf-rs/graph/badge.svg?token=di7n9t9B80)](https://codecov.io/gh/scouten-adobe/jumbf-rs)
 
-The parser is implemented with the [nom] parser combinator framework and makes extensive use of zero-copy.
+## Parser
 
-The builder can be built by itself and has no third-party crate dependencies in that configuration.
-
+The parser is implemented with the [nom] parser combinator framework and makes extensive use of zero-copy. Since the parsing features of this crate include dependencies on [nom] and [thiserror], those features are gated on a crate feature named `parser`, which is included by default.
 
 This crate is intentionally minimal in its understanding of box content. Only `jumb` (superbox) and `jumd` (description box) content are understood. The content of all other box types is application-specific and thus the meaning of that content is left to the caller.
 
-## Crate features
 
-Since the parsing features of this crate include dependencies on [nom] and [thiserror], those features are gated on a crate feature named `parser`, which is included by default.
+```rust
+let jumbf = hex!(
+    "0000002f" // box size
+    "6a756d62" // box type = 'jumb'
+        "00000027" // box size
+        "6a756d64" // box type = 'jumd'
+        "00000000000000000000000000000000" // UUID
+        "03" // toggles
+        "746573742e7375706572626f7800" // label
+);
 
-If you only need to _build_ JUMBF data structures and want to reduce compile-time overhead, you can disable the `parser` feature by importing this crate as follows:
+let (rem, sbox) = SuperBox::from_slice(&jumbf).unwrap();
+assert!(rem.is_empty());
+
+assert_eq!(
+    sbox,
+    SuperBox {
+        desc: DescriptionBox {
+            uuid: &[0; 16],
+            label: Some("test.superbox"),
+            requestable: true,
+            id: None,
+            hash: None,
+            private: None,
+            original: &jumbf[8..47],
+        },
+        child_boxes: vec!(),
+        original: &jumbf,
+    }
+);
+```
+
+## Builder
+
+This crate also allows you to build JUMBF data structures and serialize them.
+
+```rust
+const JSON_BOX_TYPE: BoxType = BoxType(*b"json");
+const RANDOM_BOX_TYPE: BoxType = BoxType(*b"abcd");
+
+let child_box1 = DataBoxBuilder::from_owned(
+    JSON_BOX_TYPE,
+    hex!("7b20226c6f636174696f6e223a20224d61726761"
+                "746520436974792c204e4a227d")
+    .to_vec(),
+);
+
+let child_box2 = DataBoxBuilder::from_borrowed(RANDOM_BOX_TYPE, b"ABCD");
+
+let sbox = SuperBoxBuilder::new(&hex!("00000000000000000000000000000000"))
+    .add_child_box(child_box1)
+    .add_child_box(child_box2);
+
+let mut jumbf = Cursor::new(Vec::<u8>::new());
+sbox.write_jumbf(&mut jumbf).unwrap();
+```
+
+### Reduced dependencies for builder only
+
+The builder can be built by itself and has no third-party crate dependencies in that configuration. If you only need to _build_ JUMBF data structures and want to reduce compile-time overhead, you can disable the `parser` feature by importing this crate as follows:
 
 ```toml
 jumbf = { version = "x.x", default-features = false }
