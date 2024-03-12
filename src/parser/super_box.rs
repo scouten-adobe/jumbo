@@ -48,32 +48,31 @@ impl<'a> SuperBox<'a> {
     /// The returned object uses zero-copy, and so has the same lifetime as the
     /// input.
     pub fn from_slice(i: &'a [u8]) -> ParseResult<Self> {
-        let (i, boxx): (&'a [u8], DataBox<'a>) = DataBox::from_slice(i)?;
-        let (_, sbox) = Self::from_box(boxx)?;
+        let (i, data_box): (&'a [u8], DataBox<'a>) = DataBox::from_slice(i)?;
+        let (_, sbox) = Self::from_data_box(&data_box)?;
         Ok((i, sbox))
     }
 
-    /// Convert an existing JUMBF box to a JUMBF superbox.
+    /// Re-parse a [`DataBox`] as a JUMBF superbox.
     ///
-    /// This consumes the existing [`DataBox`] object and will return an
-    /// appropriate error if the box doesn't match the expected syntax for a
-    /// superbox.
-    ///
-    /// Returns a tuple of the remainder of the input from the box (which should
+    /// If the box is of `jumb` type and has the correct structure, returns
+    /// a tuple of the remainder of the input from the box (which should
     /// typically be empty) and the new [`SuperBox`] object.
-    pub fn from_box(boxx: crate::parser::DataBox<'a>) -> ParseResult<'a, Self> {
-        if boxx.tbox != SUPER_BOX_TYPE {
-            return Err(nom::Err::Error(Error::InvalidSuperBoxType(boxx.tbox)));
+    ///
+    /// Will return an error if the box isn't of `jumb` type.
+    pub fn from_data_box(data_box: &DataBox<'a>) -> ParseResult<'a, Self> {
+        if data_box.tbox != SUPER_BOX_TYPE {
+            return Err(nom::Err::Error(Error::InvalidSuperBoxType(data_box.tbox)));
         }
 
-        let (i, desc) = DescriptionBox::from_slice(boxx.data)?;
+        let (i, desc) = DescriptionBox::from_slice(data_box.data)?;
 
         let (i, child_boxes) = boxes_from_slice(i)?;
         let child_boxes = child_boxes
             .into_iter()
             .map(|d| {
                 if d.tbox == SUPER_BOX_TYPE {
-                    let (_, sbox) = Self::from_box(d)?;
+                    let (_, sbox) = Self::from_data_box(&d)?;
                     Ok(ChildBox::SuperBox(sbox))
                 } else {
                     Ok(ChildBox::DataBox(d))
@@ -86,7 +85,7 @@ impl<'a> SuperBox<'a> {
             Self {
                 desc,
                 child_boxes,
-                original: boxx.original,
+                original: data_box.original,
             },
         ))
     }
@@ -109,7 +108,7 @@ impl<'a> SuperBox<'a> {
         let matching_children: Vec<&SuperBox> = self
             .child_boxes
             .iter()
-            .filter_map(|boxx| match boxx {
+            .filter_map(|child_box| match child_box {
                 ChildBox::SuperBox(sbox) => {
                     if let Some(sbox_label) = sbox.desc.label {
                         if sbox_label == label && sbox.desc.requestable {
@@ -146,10 +145,12 @@ impl<'a> SuperBox<'a> {
     /// This is a convenience function for the common case where the superbox
     /// contains a non-superbox payload that needs to be interpreted further.
     pub fn data_box(&'a self) -> Option<&'a DataBox<'a>> {
-        self.child_boxes.first().and_then(|boxx| match boxx {
-            ChildBox::DataBox(boxx) => Some(boxx),
-            _ => None,
-        })
+        self.child_boxes
+            .first()
+            .and_then(|child_box| match child_box {
+                ChildBox::DataBox(data_box) => Some(data_box),
+                _ => None,
+            })
     }
 }
 
@@ -169,9 +170,9 @@ fn boxes_from_slice(i: &[u8]) -> ParseResult<Vec<DataBox<'_>>> {
     let mut i = i;
 
     while !i.is_empty() {
-        let (x, boxx) = DataBox::from_slice(i)?;
+        let (x, data_box) = DataBox::from_slice(i)?;
         i = x;
-        result.push(boxx);
+        result.push(data_box);
     }
 
     Ok((i, result))
@@ -189,5 +190,5 @@ pub enum ChildBox<'a> {
     SuperBox(SuperBox<'a>),
 
     /// Any other kind of box.
-    DataBox(crate::parser::DataBox<'a>),
+    DataBox(DataBox<'a>),
 }
