@@ -26,12 +26,13 @@ use crate::{
 
 /// Represents a single JUMBF box.
 ///
+/// This is referred to here as a "data box" since it is intended to house
+/// application-specific data. This crate does not ascribe any meaning to the
+/// type field or the contents of this box.
+///
 /// A box is defined as a four-byte data type and a byte-slice payload
 /// of any size. The contents of the payload will vary depending on the
 /// data type.
-///
-/// This struct does not ascribe any meaning to the type field or the
-/// contents of the box.
 #[derive(Clone, Eq, PartialEq)]
 pub struct DataBox<'a> {
     /// Box type.
