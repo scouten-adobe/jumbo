@@ -44,6 +44,10 @@ See [LICENSE-APACHE](./LICENSE-APACHE) and [LICENSE-MIT](./LICENSE-MIT).
 
 Note that some components and dependent crates are licensed under different terms; please check the license terms for each crate and component for details.
 
+## Changelog
+
+Refer to the [CHANGELOG](https://github.com/contentauth/c2pa-rs/blob/main/CHANGELOG.md) for detailed changes derived from Git commit history.
+
 [JUMBF (ISO/IEC 19566-5:2019)]: https://www.iso.org/standard/73604.html
 [nom]: https://github.com/rust-bakery/nom
 [thiserror]: https://crates.io/crates/thiserror
