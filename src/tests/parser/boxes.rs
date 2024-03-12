@@ -16,7 +16,7 @@ use nom::{error::ErrorKind, Needed};
 
 use crate::{
     box_type::DESCRIPTION_BOX_TYPE,
-    parser::{Box, Error},
+    parser::{DataBox, Error},
 };
 
 #[test]
@@ -29,12 +29,12 @@ fn simple_box() {
         "746573742e64657363626f7800" // label
     );
 
-    let (rem, boxx) = Box::from_slice(&jumbf).unwrap();
+    let (rem, boxx) = DataBox::from_slice(&jumbf).unwrap();
     assert!(rem.is_empty());
 
     assert_eq!(
         boxx,
-        Box {
+        DataBox {
             tbox: DESCRIPTION_BOX_TYPE,
             data: &[
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 116, 101, 115, 116, 46, 100,
@@ -44,7 +44,7 @@ fn simple_box() {
         }
     );
 
-    assert_eq!(format!("{boxx:#?}"), "Box {\n    tbox: b\"jumd\",\n    data: 30 bytes starting with [00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 03, 74, 65, 73],\n    original: 38 bytes starting with [00, 00, 00, 26, 6a, 75, 6d, 64, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00],\n}");
+    assert_eq!(format!("{boxx:#?}"), "DataBox {\n    tbox: b\"jumd\",\n    data: 30 bytes starting with [00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 03, 74, 65, 73],\n    original: 38 bytes starting with [00, 00, 00, 26, 6a, 75, 6d, 64, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00],\n}");
 }
 
 #[test]
@@ -54,7 +54,7 @@ fn error_incomplete_box_length() {
     );
 
     assert_eq!(
-        Box::from_slice(&jumbf).unwrap_err(),
+        DataBox::from_slice(&jumbf).unwrap_err(),
         nom::Err::Error(Error::NomError(ErrorKind::Eof))
     );
 }
@@ -67,7 +67,7 @@ fn error_incomplete_box_type() {
     );
 
     assert_eq!(
-        Box::from_slice(&jumbf).unwrap_err(),
+        DataBox::from_slice(&jumbf).unwrap_err(),
         nom::Err::Error(Error::Incomplete(Needed::new(4)))
     );
 }
@@ -80,7 +80,7 @@ fn error_invalid_box_length() {
     );
 
     assert_eq!(
-        Box::from_slice(&jumbf).unwrap_err(),
+        DataBox::from_slice(&jumbf).unwrap_err(),
         nom::Err::Error(Error::InvalidBoxLength(2,),)
     );
 }
@@ -95,12 +95,12 @@ fn read_to_eof() {
         "746573742e64657363626f7800" // label
     );
 
-    let (rem, boxx) = Box::from_slice(&jumbf).unwrap();
+    let (rem, boxx) = DataBox::from_slice(&jumbf).unwrap();
     assert!(rem.is_empty());
 
     assert_eq!(
         boxx,
-        Box {
+        DataBox {
             tbox: DESCRIPTION_BOX_TYPE,
             data: &[
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 116, 101, 115, 116, 46, 100,
@@ -122,12 +122,12 @@ fn read_xlbox_size() {
         "746573742e64657363626f7800" // label
     );
 
-    let (rem, boxx) = Box::from_slice(&jumbf).unwrap();
+    let (rem, boxx) = DataBox::from_slice(&jumbf).unwrap();
     assert!(rem.is_empty());
 
     assert_eq!(
         boxx,
-        Box {
+        DataBox {
             tbox: DESCRIPTION_BOX_TYPE,
             data: &[
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 116, 101, 115, 116, 46, 100,
@@ -150,7 +150,7 @@ fn error_xlbox_size_too_small() {
     );
 
     assert_eq!(
-        Box::from_slice(&jumbf).unwrap_err(),
+        DataBox::from_slice(&jumbf).unwrap_err(),
         nom::Err::Error(Error::InvalidBoxLength(14,),)
     );
 }
@@ -166,7 +166,7 @@ fn error_incorrect_length() {
     );
 
     assert_eq!(
-        Box::from_slice(&jumbf).unwrap_err(),
+        DataBox::from_slice(&jumbf).unwrap_err(),
         nom::Err::Error(Error::Incomplete(Needed::new(30)))
     );
 }

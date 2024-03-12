@@ -25,7 +25,7 @@ use nom::{
 use crate::{
     box_type::DESCRIPTION_BOX_TYPE,
     debug::*,
-    parser::{Box, Error, ParseResult},
+    parser::{DataBox, Error, ParseResult},
 };
 
 /// A JUMBF description box describes the contents of its superbox.
@@ -53,7 +53,7 @@ pub struct DescriptionBox<'a> {
     pub hash: Option<&'a [u8; 32]>,
 
     /// Application-specific "private" box within description box.
-    pub private: Option<Box<'a>>,
+    pub private: Option<DataBox<'a>>,
 
     /// Original box data.
     ///
@@ -70,20 +70,20 @@ impl<'a> DescriptionBox<'a> {
     /// The returned object uses zero-copy, and so has the same lifetime as the
     /// input.
     pub fn from_slice(i: &'a [u8]) -> ParseResult<Self> {
-        let (i, boxx): (&'a [u8], Box<'a>) = Box::from_slice(i)?;
+        let (i, boxx): (&'a [u8], DataBox<'a>) = DataBox::from_slice(i)?;
         let (_, desc) = Self::from_box(boxx)?;
         Ok((i, desc))
     }
 
     /// Convert an existing JUMBF box to a JUMBF description box.
     ///
-    /// This consumes the existing [`Box`] object and will return an appropriate
-    /// error if the box doesn't match the expected syntax for a description
-    /// box.
+    /// This consumes the existing [`DataBox`] object and will return an
+    /// appropriate error if the box doesn't match the expected syntax for a
+    /// description box.
     ///
     /// Returns a tuple of the remainder of the input from the box (which should
     /// typically be empty) and the new [`DescriptionBox`] object.
-    pub fn from_box(boxx: Box<'a>) -> ParseResult<'a, Self> {
+    pub fn from_box(boxx: DataBox<'a>) -> ParseResult<'a, Self> {
         use crate::toggles;
 
         if boxx.tbox != DESCRIPTION_BOX_TYPE {
@@ -145,7 +145,7 @@ impl<'a> DescriptionBox<'a> {
         // Toggle bit 4 (0x10) indicates that an application-specific "private"
         // box is contained within the description box.
         let (i, private) = if toggles & toggles::HAS_PRIVATE_BOX != 0 {
-            let (i, private) = Box::from_slice(i)?;
+            let (i, private) = DataBox::from_slice(i)?;
             (i, Some(private))
         } else {
             (i, None)

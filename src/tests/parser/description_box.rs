@@ -15,7 +15,7 @@ use hex_literal::hex;
 use nom::Needed;
 
 use crate::{
-    parser::{Box, DescriptionBox, Error},
+    parser::{DataBox, DescriptionBox, Error},
     BoxType,
 };
 
@@ -58,7 +58,7 @@ fn from_box() {
         "746573742e64657363626f7800" // label
     );
 
-    let (rem, boxx) = Box::from_slice(&jumbf).unwrap();
+    let (rem, boxx) = DataBox::from_slice(&jumbf).unwrap();
     assert!(rem.is_empty());
 
     let (rem, dbox) = DescriptionBox::from_box(boxx).unwrap();
@@ -90,7 +90,7 @@ fn with_id() {
         "00001000" // ID
     );
 
-    let (rem, boxx) = Box::from_slice(&jumbf).unwrap();
+    let (rem, boxx) = DataBox::from_slice(&jumbf).unwrap();
     assert!(rem.is_empty());
 
     let (rem, dbox) = DescriptionBox::from_box(boxx).unwrap();
@@ -140,7 +140,7 @@ fn with_hash() {
         "686173682e2e2e2e2e2e2e2e2e2e2e2e" // hash
     );
 
-    let (rem, boxx) = Box::from_slice(&jumbf).unwrap();
+    let (rem, boxx) = DataBox::from_slice(&jumbf).unwrap();
     assert!(rem.is_empty());
 
     let (rem, dbox) = DescriptionBox::from_box(boxx).unwrap();
@@ -176,7 +176,7 @@ fn with_private_box() {
                 "746520436974792c204e4a227d" // payload (JSON)
     );
 
-    let (rem, boxx) = Box::from_slice(&jumbf).unwrap();
+    let (rem, boxx) = DataBox::from_slice(&jumbf).unwrap();
     assert!(rem.is_empty());
 
     let (rem, dbox) = DescriptionBox::from_box(boxx).unwrap();
@@ -190,7 +190,7 @@ fn with_private_box() {
             requestable: true,
             id: None,
             hash: None,
-            private: Some(Box {
+            private: Some(DataBox {
                 tbox: BoxType(*b"json"),
                 data: &[
                     123, 32, 34, 108, 111, 99, 97, 116, 105, 111, 110, 34, 58, 32, 34, 77, 97, 114,
@@ -202,7 +202,7 @@ fn with_private_box() {
         }
     );
 
-    assert_eq!(format!("{dbox:#?}"), "DescriptionBox {\n    uuid: [00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00],\n    label: Some(\n        \"test.descbox\",\n    ),\n    requestable: true,\n    id: None,\n    hash: None,\n    private: Some(\n        Box {\n            tbox: b\"json\",\n            data: 33 bytes starting with [7b, 20, 22, 6c, 6f, 63, 61, 74, 69, 6f, 6e, 22, 3a, 20, 22, 4d, 61, 72, 67, 61],\n            original: 41 bytes starting with [00, 00, 00, 29, 6a, 73, 6f, 6e, 7b, 20, 22, 6c, 6f, 63, 61, 74, 69, 6f, 6e, 22],\n        },\n    ),\n    original: 79 bytes starting with [00, 00, 00, 4f, 6a, 75, 6d, 64, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00],\n}");
+    assert_eq!(format!("{dbox:#?}"), "DescriptionBox {\n    uuid: [00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00],\n    label: Some(\n        \"test.descbox\",\n    ),\n    requestable: true,\n    id: None,\n    hash: None,\n    private: Some(\n        DataBox {\n            tbox: b\"json\",\n            data: 33 bytes starting with [7b, 20, 22, 6c, 6f, 63, 61, 74, 69, 6f, 6e, 22, 3a, 20, 22, 4d, 61, 72, 67, 61],\n            original: 41 bytes starting with [00, 00, 00, 29, 6a, 73, 6f, 6e, 7b, 20, 22, 6c, 6f, 63, 61, 74, 69, 6f, 6e, 22],\n        },\n    ),\n    original: 79 bytes starting with [00, 00, 00, 4f, 6a, 75, 6d, 64, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00],\n}");
 }
 
 #[test]

@@ -26,14 +26,15 @@ use crate::{
 
 /// Represents a single JUMBF box.
 ///
+/// This is referred to here as a "data box" since it is intended to house
+/// application-specific data. This crate does not ascribe any meaning to the
+/// type field or the contents of this box.
+///
 /// A box is defined as a four-byte data type and a byte-slice payload
 /// of any size. The contents of the payload will vary depending on the
 /// data type.
-///
-/// This struct does not ascribe any meaning to the type field or the
-/// contents of the box.
 #[derive(Clone, Eq, PartialEq)]
-pub struct Box<'a> {
+pub struct DataBox<'a> {
     /// Box type.
     ///
     /// This field specifies the type of information found in the `data`
@@ -62,7 +63,7 @@ pub struct Box<'a> {
     pub original: &'a [u8],
 }
 
-impl<'a> Box<'a> {
+impl<'a> DataBox<'a> {
     /// Parse a JUMBF box, and return a tuple of the remainder of the input and
     /// the parsed box.
     ///
@@ -110,9 +111,9 @@ impl<'a> Box<'a> {
     }
 }
 
-impl<'a> Debug for Box<'a> {
+impl<'a> Debug for DataBox<'a> {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), std::fmt::Error> {
-        f.debug_struct("Box")
+        f.debug_struct("DataBox")
             .field("tbox", &self.tbox)
             .field("data", &DebugByteSlice(self.data))
             .field("original", &DebugByteSlice(self.original))
