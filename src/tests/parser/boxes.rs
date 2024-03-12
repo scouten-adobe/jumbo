@@ -13,6 +13,7 @@
 
 use hex_literal::hex;
 use nom::{error::ErrorKind, Needed};
+use pretty_assertions_sorted::assert_eq;
 
 use crate::{
     box_type::DESCRIPTION_BOX_TYPE,
