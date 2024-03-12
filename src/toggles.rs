@@ -11,8 +11,8 @@
 // specific language governing permissions and limitations under
 // each license.
 
-///! Toggles in a JUMBF description box describe which additional
-///! information is present in the description
+//! Toggles in a JUMBF description box describe which additional
+//! information is present in the description
 
 /// Toggle bit 0 (0x01) indicates that this superbox can be requested
 /// via URI requests.
