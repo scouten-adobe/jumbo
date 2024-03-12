@@ -16,7 +16,7 @@ use std::fmt::{Debug, Formatter};
 use crate::{
     box_type::SUPER_BOX_TYPE,
     debug::*,
-    parser::{Box, DescriptionBox, Error, ParseResult},
+    parser::{DataBox, DescriptionBox, Error, ParseResult},
 };
 
 /// A JUMBF superbox contains a description box and zero or more
@@ -48,19 +48,20 @@ impl<'a> SuperBox<'a> {
     /// The returned object uses zero-copy, and so has the same lifetime as the
     /// input.
     pub fn from_slice(i: &'a [u8]) -> ParseResult<Self> {
-        let (i, boxx): (&'a [u8], Box<'a>) = Box::from_slice(i)?;
+        let (i, boxx): (&'a [u8], DataBox<'a>) = DataBox::from_slice(i)?;
         let (_, sbox) = Self::from_box(boxx)?;
         Ok((i, sbox))
     }
 
     /// Convert an existing JUMBF box to a JUMBF superbox.
     ///
-    /// This consumes the existing [`Box`] object and will return an appropriate
-    /// error if the box doesn't match the expected syntax for a superbox.
+    /// This consumes the existing [`DataBox`] object and will return an
+    /// appropriate error if the box doesn't match the expected syntax for a
+    /// superbox.
     ///
     /// Returns a tuple of the remainder of the input from the box (which should
     /// typically be empty) and the new [`SuperBox`] object.
-    pub fn from_box(boxx: crate::parser::Box<'a>) -> ParseResult<'a, Self> {
+    pub fn from_box(boxx: crate::parser::DataBox<'a>) -> ParseResult<'a, Self> {
         if boxx.tbox != SUPER_BOX_TYPE {
             return Err(nom::Err::Error(Error::InvalidSuperBoxType(boxx.tbox)));
         }
@@ -144,7 +145,7 @@ impl<'a> SuperBox<'a> {
     ///
     /// This is a convenience function for the common case where the superbox
     /// contains a non-superbox payload that needs to be interpreted further.
-    pub fn data_box(&'a self) -> Option<&'a Box<'a>> {
+    pub fn data_box(&'a self) -> Option<&'a DataBox<'a>> {
         self.child_boxes.first().and_then(|boxx| match boxx {
             ChildBox::DataBox(boxx) => Some(boxx),
             _ => None,
@@ -163,12 +164,12 @@ impl<'a> Debug for SuperBox<'a> {
 }
 
 // Parse boxes from slice until slice is empty.
-fn boxes_from_slice(i: &[u8]) -> ParseResult<Vec<Box<'_>>> {
-    let mut result: Vec<Box> = vec![];
+fn boxes_from_slice(i: &[u8]) -> ParseResult<Vec<DataBox<'_>>> {
+    let mut result: Vec<DataBox> = vec![];
     let mut i = i;
 
     while !i.is_empty() {
-        let (x, boxx) = Box::from_slice(i)?;
+        let (x, boxx) = DataBox::from_slice(i)?;
         i = x;
         result.push(boxx);
     }
@@ -188,5 +189,5 @@ pub enum ChildBox<'a> {
     SuperBox(SuperBox<'a>),
 
     /// Any other kind of box.
-    DataBox(crate::parser::Box<'a>),
+    DataBox(crate::parser::DataBox<'a>),
 }

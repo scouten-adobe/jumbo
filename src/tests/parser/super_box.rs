@@ -14,7 +14,7 @@
 use hex_literal::hex;
 
 use crate::{
-    parser::{Box, ChildBox, DescriptionBox, Error, SuperBox},
+    parser::{ChildBox, DataBox, DescriptionBox, Error, SuperBox},
     BoxType,
 };
 
@@ -137,7 +137,7 @@ fn data_box_sample() {
                 private: None,
                 original: &jumbf[8..48],
             },
-            child_boxes: vec!(ChildBox::DataBox(Box {
+            child_boxes: vec!(ChildBox::DataBox(DataBox {
                 tbox: BoxType(*b"uuid"),
                 data: &[
                     99, 50, 99, 115, 0, 17, 0, 16, 128, 0, 0, 170, 0, 56, 155, 113, 116, 104, 105,
@@ -285,7 +285,7 @@ fn complex_example() {
                                 private: None,
                                 original: &jumbf[139..184],
                             },
-                            child_boxes: vec![ChildBox::DataBox(Box {
+                            child_boxes: vec![ChildBox::DataBox(DataBox {
                                 tbox: BoxType(*b"json"),
                                 data: &[
                                     123, 32, 34, 108, 111, 99, 97, 116, 105, 111, 110, 34, 58, 32,
@@ -310,7 +310,7 @@ fn complex_example() {
                             private: None,
                             original: &jumbf[233..269],
                         },
-                        child_boxes: vec![ChildBox::DataBox(Box {
+                        child_boxes: vec![ChildBox::DataBox(DataBox {
                             tbox: BoxType(*b"json"),
                             data: &[
                                 123, 10, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 34, 114,
@@ -345,7 +345,7 @@ fn complex_example() {
                             private: None,
                             original: &jumbf[504..544],
                         },
-                        child_boxes: vec![ChildBox::DataBox(Box {
+                        child_boxes: vec![ChildBox::DataBox(DataBox {
                             tbox: BoxType(*b"uuid"),
                             data: &[
                                 99, 50, 99, 115, 0, 17, 0, 16, 128, 0, 0, 170, 0, 56, 155, 113,
@@ -377,7 +377,7 @@ fn complex_example() {
                 private: None,
                 original: &jumbf[504..544],
             },
-            child_boxes: vec![ChildBox::DataBox(Box {
+            child_boxes: vec![ChildBox::DataBox(DataBox {
                 tbox: BoxType(*b"uuid"),
                 data: &[
                     99, 50, 99, 115, 0, 17, 0, 16, 128, 0, 0, 170, 0, 56, 155, 113, 116, 104, 105,
@@ -398,7 +398,7 @@ fn complex_example() {
     assert_eq!(
         sbox.find_by_label("cb.adobe_1/c2pa.signature")
             .and_then(|sig| sig.data_box()),
-        Some(&Box {
+        Some(&DataBox {
             tbox: BoxType(*b"uuid"),
             data: &[
                 99, 50, 99, 115, 0, 17, 0, 16, 128, 0, 0, 170, 0, 56, 155, 113, 116, 104, 105, 115,
