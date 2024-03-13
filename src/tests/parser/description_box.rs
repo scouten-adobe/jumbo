@@ -13,6 +13,7 @@
 
 use hex_literal::hex;
 use nom::Needed;
+use pretty_assertions_sorted::assert_eq;
 
 use crate::{
     parser::{DataBox, DescriptionBox, Error},

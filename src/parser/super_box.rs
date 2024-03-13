@@ -40,20 +40,35 @@ pub struct SuperBox<'a> {
 
 impl<'a> SuperBox<'a> {
     /// Parse a byte-slice as a JUMBF superbox, and return a tuple of the
-    /// remainder of the input and the parsed super box.
-    ///
-    /// Children of this superbox which are also superboxes will be parsed
-    /// recursively.
+    /// remainder of the input and the parsed super box. Children of this
+    /// superbox which are also superboxes will be parsed recursively without
+    /// limit.
     ///
     /// The returned object uses zero-copy, and so has the same lifetime as the
     /// input.
     pub fn from_slice(i: &'a [u8]) -> ParseResult<Self> {
+        Self::from_slice_with_depth_limit(i, usize::MAX)
+    }
+
+    /// Parse a byte-slice as a JUMBF superbox, and return a tuple of the
+    /// remainder of the input and the parsed super box. Children of this
+    /// superbox which are also superboxes will be parsed recursively, to a
+    /// limit of `depth_limit` nested boxes.
+    ///
+    /// If `depth_limit` is 0, any child superboxes that are found will be
+    /// returned as plain [`DataBox`] structs instead.
+    ///
+    /// The returned object uses zero-copy, and so has the same lifetime as the
+    /// input.
+    pub fn from_slice_with_depth_limit(i: &'a [u8], depth_limit: usize) -> ParseResult<Self> {
         let (i, data_box): (&'a [u8], DataBox<'a>) = DataBox::from_slice(i)?;
-        let (_, sbox) = Self::from_data_box(&data_box)?;
+        let (_, sbox) = Self::from_data_box_with_depth_limit(&data_box, depth_limit)?;
         Ok((i, sbox))
     }
 
-    /// Re-parse a [`DataBox`] as a JUMBF superbox.
+    /// Re-parse a [`DataBox`] as a JUMBF superbox. Children of this
+    /// superbox which are also superboxes will be parsed recursively without
+    /// limit.
     ///
     /// If the box is of `jumb` type and has the correct structure, returns
     /// a tuple of the remainder of the input from the box (which should
@@ -61,6 +76,24 @@ impl<'a> SuperBox<'a> {
     ///
     /// Will return an error if the box isn't of `jumb` type.
     pub fn from_data_box(data_box: &DataBox<'a>) -> ParseResult<'a, Self> {
+        Self::from_data_box_with_depth_limit(data_box, usize::MAX)
+    }
+
+    /// Re-parse a [`DataBox`] as a JUMBF superbox. Children of this superbox
+    /// which are also superboxes will be parsed recursively, to a limit of
+    /// `depth_limit` nested boxes.
+    ///
+    /// If the box is of `jumb` type and has the correct structure, returns
+    /// a tuple of the remainder of the input from the box (which should
+    /// typically be empty) and the new [`SuperBox`] object. If `depth_limit` is
+    /// 0, any child superboxes that are found will be returned as plain
+    /// [`DataBox`] structs instead.
+    ///
+    /// Will return an error if the box isn't of `jumb` type.
+    pub fn from_data_box_with_depth_limit(
+        data_box: &DataBox<'a>,
+        depth_limit: usize,
+    ) -> ParseResult<'a, Self> {
         if data_box.tbox != SUPER_BOX_TYPE {
             return Err(nom::Err::Error(Error::InvalidSuperBoxType(data_box.tbox)));
         }
@@ -71,8 +104,8 @@ impl<'a> SuperBox<'a> {
         let child_boxes = child_boxes
             .into_iter()
             .map(|d| {
-                if d.tbox == SUPER_BOX_TYPE {
-                    let (_, sbox) = Self::from_data_box(&d)?;
+                if d.tbox == SUPER_BOX_TYPE && depth_limit > 0 {
+                    let (_, sbox) = Self::from_data_box_with_depth_limit(&d, depth_limit - 1)?;
                     Ok(ChildBox::SuperBox(sbox))
                 } else {
                     Ok(ChildBox::DataBox(d))

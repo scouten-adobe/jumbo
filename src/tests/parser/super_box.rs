@@ -12,6 +12,7 @@
 // each license.
 
 use hex_literal::hex;
+use pretty_assertions_sorted::assert_eq;
 
 use crate::{
     parser::{ChildBox, DataBox, DescriptionBox, Error, SuperBox},
