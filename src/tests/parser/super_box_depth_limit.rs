@@ -130,13 +130,125 @@ fn depth_limit_0() {
     assert_eq!(sbox.find_by_label("cb.adobe_1/c2pa.signaturex"), None);
     assert_eq!(sbox.find_by_label("cb.adobe_1/c2pa.signature/blah"), None);
 
+    let data_box = sbox.data_box().unwrap();
+
     assert_eq!(
-        sbox.data_box(),
-        Some(&DataBox {
+        data_box,
+        &DataBox {
             tbox: BoxType(*b"jumb"),
             original: &JUMBF[38..615],
             data: &JUMBF[46..615],
-        })
+        }
+    );
+
+    let (_, nested_box) = SuperBox::from_data_box(data_box).unwrap();
+
+    assert_eq!(
+        nested_box,
+        SuperBox {
+            desc: DescriptionBox {
+                uuid: &[99, 50, 109, 97, 0, 17, 0, 16, 128, 0, 0, 170, 0, 56, 155, 113,],
+                label: Some("cb.adobe_1"),
+                requestable: true,
+                id: None,
+                hash: None,
+                private: None,
+                original: &JUMBF[46..82],
+            },
+            child_boxes: vec!(
+                ChildBox::SuperBox(SuperBox {
+                    desc: DescriptionBox {
+                        uuid: &[99, 50, 97, 115, 0, 17, 0, 16, 128, 0, 0, 170, 0, 56, 155, 113,],
+                        label: Some("c2pa.assertions",),
+                        requestable: true,
+                        id: None,
+                        hash: None,
+                        private: None,
+                        original: &JUMBF[90..131],
+                    },
+                    child_boxes: vec![ChildBox::SuperBox(SuperBox {
+                        desc: DescriptionBox {
+                            uuid: &[
+                                106, 115, 111, 110, 0, 17, 0, 16, 128, 0, 0, 170, 0, 56, 155, 113,
+                            ],
+                            label: Some("c2pa.location.broad",),
+                            requestable: true,
+                            id: None,
+                            hash: None,
+                            private: None,
+                            original: &JUMBF[139..184],
+                        },
+                        child_boxes: vec![ChildBox::DataBox(DataBox {
+                            tbox: BoxType(*b"json"),
+                            data: &[
+                                123, 32, 34, 108, 111, 99, 97, 116, 105, 111, 110, 34, 58, 32, 34,
+                                77, 97, 114, 103, 97, 116, 101, 32, 67, 105, 116, 121, 44, 32, 78,
+                                74, 34, 125,
+                            ],
+                            original: &JUMBF[184..225],
+                        },),],
+                        original: &JUMBF[131..225],
+                    },),],
+                    original: &JUMBF[82..225],
+                },),
+                ChildBox::SuperBox(SuperBox {
+                    desc: DescriptionBox {
+                        uuid: &[99, 50, 99, 108, 0, 17, 0, 16, 128, 0, 0, 170, 0, 56, 155, 113,],
+                        label: Some("c2pa.claim",),
+                        requestable: true,
+                        id: None,
+                        hash: None,
+                        private: None,
+                        original: &JUMBF[233..269],
+                    },
+                    child_boxes: vec![ChildBox::DataBox(DataBox {
+                        tbox: BoxType(*b"json"),
+                        data: &[
+                            123, 10, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 34, 114, 101,
+                            99, 111, 114, 100, 101, 114, 34, 32, 58, 32, 34, 80, 104, 111, 116,
+                            111, 115, 104, 111, 112, 34, 44, 10, 32, 32, 32, 32, 32, 32, 32, 32,
+                            32, 32, 32, 32, 34, 115, 105, 103, 110, 97, 116, 117, 114, 101, 34, 32,
+                            58, 32, 34, 115, 101, 108, 102, 35, 106, 117, 109, 98, 102, 61, 115,
+                            95, 97, 100, 111, 98, 101, 95, 49, 34, 44, 10, 32, 32, 32, 32, 32, 32,
+                            32, 32, 32, 32, 32, 32, 34, 97, 115, 115, 101, 114, 116, 105, 111, 110,
+                            115, 34, 32, 58, 32, 91, 10, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32,
+                            32, 32, 32, 32, 32, 32, 34, 115, 101, 108, 102, 35, 106, 117, 109, 98,
+                            102, 61, 97, 115, 95, 97, 100, 111, 98, 101, 95, 49, 47, 99, 50, 112,
+                            97, 46, 108, 111, 99, 97, 116, 105, 111, 110, 46, 98, 114, 111, 97,
+                            100, 63, 104, 108, 61, 55, 54, 49, 52, 50, 66, 68, 54, 50, 51, 54, 51,
+                            70, 34, 10, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 93, 10, 32,
+                            32, 32, 32, 32, 32, 32, 32, 125,
+                        ],
+                        original: &JUMBF[269..496],
+                    },),],
+                    original: &JUMBF[225..496],
+                },),
+                ChildBox::SuperBox(SuperBox {
+                    desc: DescriptionBox {
+                        uuid: &[99, 50, 99, 115, 0, 17, 0, 16, 128, 0, 0, 170, 0, 56, 155, 113,],
+                        label: Some("c2pa.signature",),
+                        requestable: true,
+                        id: None,
+                        hash: None,
+                        private: None,
+                        original: &JUMBF[504..544],
+                    },
+                    child_boxes: vec![ChildBox::DataBox(DataBox {
+                        tbox: BoxType(*b"uuid"),
+                        data: &[
+                            99, 50, 99, 115, 0, 17, 0, 16, 128, 0, 0, 170, 0, 56, 155, 113, 116,
+                            104, 105, 115, 32, 119, 111, 117, 108, 100, 32, 110, 111, 114, 109, 97,
+                            108, 108, 121, 32, 98, 101, 32, 98, 105, 110, 97, 114, 121, 32, 115,
+                            105, 103, 110, 97, 116, 117, 114, 101, 32, 100, 97, 116, 97, 46, 46,
+                            46,
+                        ],
+                        original: &JUMBF[544..615],
+                    },),],
+                    original: &JUMBF[496..615],
+                },),
+            ),
+            original: &JUMBF[38..615],
+        }
     );
 }
 
