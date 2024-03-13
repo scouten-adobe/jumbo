@@ -110,7 +110,7 @@ Note that some components and dependent crates are licensed under different term
 
 ## Changelog
 
-Refer to the [CHANGELOG](https://github.com/contentauth/c2pa-rs/blob/main/CHANGELOG.md) for detailed changes derived from Git commit history.
+Refer to the [CHANGELOG](https://github.com/scouten-adobe/jumbf-rs/blob/main/CHANGELOG.md) for detailed changes derived from Git commit history.
 
 [JUMBF (ISO/IEC 19566-5:2019)]: https://www.iso.org/standard/73604.html
 [nom]: https://github.com/rust-bakery/nom
