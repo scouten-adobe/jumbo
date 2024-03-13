@@ -1,7 +1,7 @@
 [package]
 name = "jumbf"
 version = "0.2.2"
-description = "A JUMBF (ISO/IEC 19566-5:2019) parser and builder written in pure Rust."
+description = "A JUMBF (ISO/IEC 19566-5:2023) parser and builder written in pure Rust."
 repository = "https://github.com/scouten-adobe/jumbf-rs"
 documentation = "https://docs.rs/jumbf"
 readme = "README.md"
