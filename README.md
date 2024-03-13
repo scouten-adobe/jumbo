@@ -1,6 +1,6 @@
 # jumbf
 
-A [JUMBF (ISO/IEC 19566-5:2019)] parser and builder written in pure Rust.
+A [JUMBF (ISO/IEC 19566-5:2023)] parser and builder written in pure Rust.
 
 [![CI](https://github.com/scouten-adobe/jumbf-rs/actions/workflows/ci.yml/badge.svg)](https://github.com/scouten-adobe/jumbf-rs/actions/workflows/ci.yml)  [![Latest Version](https://img.shields.io/crates/v/jumbf.svg)](https://crates.io/crates/jumbf) [![docs.rs](https://img.shields.io/docsrs/jumbf)](https://docs.rs/jumbf/latest/jumbf/) [![codecov](https://codecov.io/gh/scouten-adobe/jumbf-rs/graph/badge.svg?token=di7n9t9B80)](https://codecov.io/gh/scouten-adobe/jumbf-rs)
 
@@ -8,7 +8,7 @@ A [JUMBF (ISO/IEC 19566-5:2019)] parser and builder written in pure Rust.
 
 The parser is implemented with the [nom] parser combinator framework and makes extensive use of zero-copy. Since the parsing features of this crate include dependencies on [nom] and [thiserror], those features are gated on a crate feature named `parser`, which is included by default.
 
-This crate is intentionally minimal in its understanding of box content. Only `jumb` (superbox) and `jumd` (description box) content are understood. The content of all other box types is application-specific and thus the meaning of that content is left to the caller.
+This crate is intentionally minimal in its understanding of box content. Only `jumb` (superbox) and `jumd` (description box) content are understood. The content of all other box types (including other types described in the JUMBF standard) is generally application-specific and thus the meaning of that content is left to the caller.
 
 
 ```rust
@@ -90,11 +90,11 @@ We welcome contributions to this project. For information on contributing, provi
 
 ## Requirements
 
-The toolkit requires **Rust version 1.74.0** or newer. When a newer version of Rust becomes required, a new minor (1.x.0) version of this crate will be released.
+The crate requires **Rust version 1.74.0** or newer. When a newer version of Rust becomes required, a new minor (1.x.0) version of this crate will be released.
 
 ### Supported platforms
 
-The toolkit has been tested on the following operating systems:
+The crate has been tested on the following operating systems:
 
 * Windows (IMPORTANT: Only the MSVC build chain is supported on Windows. We would welcome a PR to enable GNU build chain support on Windows.)
 * MacOS (Intel and Apple silicon)
@@ -112,6 +112,6 @@ Note that some components and dependent crates are licensed under different term
 
 Refer to the [CHANGELOG](https://github.com/scouten-adobe/jumbf-rs/blob/main/CHANGELOG.md) for detailed changes derived from Git commit history.
 
-[JUMBF (ISO/IEC 19566-5:2019)]: https://www.iso.org/standard/73604.html
+[JUMBF (ISO/IEC 19566-5:2023)]: https://www.iso.org/standard/84635.html
 [nom]: https://github.com/rust-bakery/nom
 [thiserror]: https://crates.io/crates/thiserror
