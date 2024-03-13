@@ -6,6 +6,14 @@ This project adheres to [Semantic Versioning](https://semver.org), except that â
 
 Do not manually edit this file. It will be automatically updated when a new release is published.
 
+## 0.2.0
+_13 March 2024_
+
+* Add ability to limit recursion when parsing superboxes ([#3](https://github.com/scouten-adobe/jumbf-rs/pull/3))
+* (MINOR) Change `SuperBox::from_box` to `SuperBox::from_data_box` ([#4](https://github.com/scouten-adobe/jumbf-rs/pull/4))
+* Add more examples to readme
+* (MINOR) Rename `Box` to `DataBox` ([#1](https://github.com/scouten-adobe/jumbf-rs/pull/1))
+
 ## 0.1.0
 _12 March 2024_
 
