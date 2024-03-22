@@ -6,6 +6,12 @@ This project adheres to [Semantic Versioning](https://semver.org), except that â
 
 Do not manually edit this file. It will be automatically updated when a new release is published.
 
+## 0.3.0
+_22 March 2024_
+
+* Add an example for offset_within_superbox ([#6](https://github.com/scouten-adobe/jumbf-rs/pull/6))
+* (MINOR) DataBox: Add new function offset_within_superbox ([#5](https://github.com/scouten-adobe/jumbf-rs/pull/5))
+
 ## 0.2.2
 _13 March 2024_
 
