@@ -11,7 +11,7 @@
 // specific language governing permissions and limitations under
 // each license.
 
-mod boxes;
+mod data_box;
 mod description_box;
 mod super_box;
 mod super_box_depth_limit;

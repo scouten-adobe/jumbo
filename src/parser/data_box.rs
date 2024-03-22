@@ -20,7 +20,7 @@ use nom::{
 
 use crate::{
     debug::*,
-    parser::{Error, ParseResult},
+    parser::{Error, ParseResult, SuperBox},
     BoxType,
 };
 
@@ -107,6 +107,26 @@ impl<'a> DataBox<'a> {
             ))
         } else {
             Err(nom::Err::Error(Error::Incomplete(Needed::new(len))))
+        }
+    }
+
+    /// Returns the offset of the *data* portion of this box within its
+    /// enclosing [`SuperBox`].
+    ///
+    /// Will return `None` if this box is not a member of the [`SuperBox`].
+    pub fn offset_within_superbox(&self, super_box: &SuperBox) -> Option<usize> {
+        let sbox_as_ptr = super_box.original.as_ptr() as usize;
+        let self_as_ptr = self.data.as_ptr() as usize;
+
+        if self_as_ptr < sbox_as_ptr {
+            return None;
+        }
+
+        let offset = self_as_ptr.wrapping_sub(sbox_as_ptr);
+        if offset + self.data.len() > super_box.original.len() {
+            None
+        } else {
+            Some(offset)
         }
     }
 }
