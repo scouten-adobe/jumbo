@@ -324,14 +324,13 @@ mod offset_within_superbox {
             .find_by_label("cb.adobe_1")
             .unwrap()
             .child_boxes
-            .iter()
-            .nth(2)
+            .get(2)
             .unwrap();
 
         let ChildBox::SuperBox(sig_sbox) = sig_sbox else {
             panic!("Wrong ChildBox type");
         };
 
-        assert!(claim_dbox.offset_within_superbox(&sig_sbox).is_none());
+        assert!(claim_dbox.offset_within_superbox(sig_sbox).is_none());
     }
 }
