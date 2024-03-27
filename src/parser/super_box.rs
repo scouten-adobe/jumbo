@@ -231,7 +231,7 @@ impl<'a> ChildBox<'a> {
     /// superbox.
     pub fn as_super_box(&'a self) -> Option<&'a SuperBox<'a>> {
         if let Self::SuperBox(sb) = self {
-            Some(&sb)
+            Some(sb)
         } else {
             None
         }
@@ -241,7 +241,7 @@ impl<'a> ChildBox<'a> {
     /// box.
     pub fn as_data_box(&'a self) -> Option<&'a DataBox<'a>> {
         if let Self::DataBox(db) = self {
-            Some(&db)
+            Some(db)
         } else {
             None
         }
