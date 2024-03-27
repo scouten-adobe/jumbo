@@ -6,6 +6,11 @@ This project adheres to [Semantic Versioning](https://semver.org), except that â
 
 Do not manually edit this file. It will be automatically updated when a new release is published.
 
+## 0.4.0
+_27 March 2024_
+
+* (MINOR) Add ChildBox.as_super_box() and .as_data_box() methods ([#7](https://github.com/scouten-adobe/jumbf-rs/pull/7))
+
 ## 0.3.0
 _22 March 2024_
 
