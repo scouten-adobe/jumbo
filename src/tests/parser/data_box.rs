@@ -181,7 +181,7 @@ mod offset_within_superbox {
     use hex_literal::hex;
     use pretty_assertions_sorted::assert_eq;
 
-    use crate::parser::{ChildBox, SuperBox};
+    use crate::parser::SuperBox;
 
     #[test]
     fn abuse_read_to_eof() {
@@ -227,6 +227,12 @@ mod offset_within_superbox {
             56
         );
         assert!(dbox_from_full.offset_within_superbox(&sbox_short).is_none());
+
+        let dbox_as_child = sbox_full.child_boxes.first().unwrap();
+        assert!(dbox_as_child.as_super_box().is_none());
+
+        let dbox_as_child = dbox_as_child.as_data_box().unwrap();
+        assert_eq!(dbox_from_full, dbox_as_child);
     }
 
     #[test]
@@ -327,10 +333,9 @@ mod offset_within_superbox {
             .get(2)
             .unwrap();
 
-        let ChildBox::SuperBox(sig_sbox) = sig_sbox else {
-            panic!("Wrong ChildBox type");
-        };
+        assert!(sig_sbox.as_data_box().is_none());
 
+        let sig_sbox = sig_sbox.as_super_box().unwrap();
         assert!(claim_dbox.offset_within_superbox(sig_sbox).is_none());
     }
 }

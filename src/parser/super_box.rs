@@ -225,3 +225,25 @@ pub enum ChildBox<'a> {
     /// Any other kind of box.
     DataBox(DataBox<'a>),
 }
+
+impl<'a> ChildBox<'a> {
+    /// If this represents a nested super box, return a reference to that
+    /// superbox.
+    pub fn as_super_box(&'a self) -> Option<&'a SuperBox<'a>> {
+        if let Self::SuperBox(sb) = self {
+            Some(sb)
+        } else {
+            None
+        }
+    }
+
+    /// If this represents a nested data box, return a reference to that data
+    /// box.
+    pub fn as_data_box(&'a self) -> Option<&'a DataBox<'a>> {
+        if let Self::DataBox(db) = self {
+            Some(db)
+        } else {
+            None
+        }
+    }
+}
