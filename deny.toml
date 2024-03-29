@@ -3,6 +3,7 @@
 # For further details on all configuration options see:
 # https://embarkstudios.github.io/cargo-deny/checks/cfg.html
 
+[graph]
 targets = [
     { triple = "x86_64-unknown-linux-gnu" },
     { triple = "x86_64-apple-darwin" },
@@ -10,42 +11,24 @@ targets = [
     { triple = "aarch64-apple-darwin" },
 ]
 
-# Deny all advisories unless explicitly ignored.
-[advisories]
-vulnerability = "allow" # "deny" # TODO: Re-enable when possible.
-unmaintained = "allow" # "deny" # TODO: Re-enable when possible.
-yanked = "allow" # "deny" # TODO: Re-enable when possible.
-notice = "allow" # "deny" # TODO: Re-enable when possible.
-
 # Deny multiple versions unless explicitly skipped.
 [bans]
 multiple-versions = "allow" # "deny" # TODO: Re-enable when possible.
 wildcards = "allow"
 
-# List of allowed licenses.
 [licenses]
 allow = [
   "Apache-2.0",
-  "BSD-2-Clause",
-  "BSD-3-Clause",
-  "CC0-1.0",
-  "ISC",
-  "LicenseRef-ring",
+  # "BSD-2-Clause",
+  # "BSD-3-Clause",
+  # "CC0-1.0",
+  # "ISC",
   "MIT",
-  "MPL-2.0",
+  # "MPL-2.0",
   "Unicode-DFS-2016",
-  "Zlib",
+  # "Zlib",
 ]
-copyleft = "deny"
-unlicensed = "deny"
-confidence-threshold = 0.8
-
-[[licenses.clarify]]
-name = "ring"
-expression = "LicenseRef-ring"
-license-files = [
-  { path = "LICENSE", hash = 3171872035 }
-]
+confidence-threshold = 0.9
 
 [sources]
 unknown-registry = "deny"
