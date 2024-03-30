@@ -30,3 +30,8 @@ pretty_assertions_sorted = "1.2.3"
 name = "simple_data_box"
 harness = false
 required_features = ["parser"]
+
+[[bench]]
+name = "parse_c2pa"
+harness = false
+required_features = ["parser"]
