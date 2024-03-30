@@ -29,3 +29,4 @@ pretty_assertions_sorted = "1.2.3"
 [[bench]]
 name = "simple_data_box"
 harness = false
+required_features = ["parser"]
