@@ -271,7 +271,7 @@ jobs:
         uses: CodSpeedHQ/action@v2
         with:
           run: cargo codspeed run
-          # token: ${{ secrets.CODSPEED_TOKEN }}
+          token: ${{ secrets.CODSPEED_TOKEN }}
 
   version_bump:
     name: Ensure (MINOR) tag is used when making an API breaking change
