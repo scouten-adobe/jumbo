@@ -613,3 +613,168 @@ fn find_by_label_skips_non_requestable_boxes() {
         })
     );
 }
+
+#[test]
+fn parse_c2pa_manifest() {
+    let jumbf = include_bytes!("../fixtures/C.c2pa");
+
+    let (rem, sbox) = SuperBox::from_slice(jumbf).unwrap();
+    assert!(rem.is_empty());
+
+    assert_eq!(
+        sbox,
+        SuperBox {
+            desc: DescriptionBox {
+                uuid: &hex!("63 32 70 61 00 11 00 10 80 00 00 aa 00 38 9b 71"),
+                label: Some("c2pa",),
+                requestable: true,
+                id: None,
+                hash: None,
+                private: None,
+                original: &jumbf[8..38],
+            },
+            child_boxes: vec![ChildBox::SuperBox(SuperBox {
+                desc: DescriptionBox {
+                    uuid: &hex!("63 32 6d 61 00 11 00 10 80 00 00 aa 00 38 9b 71"),
+                    label: Some("contentauth:urn:uuid:021b555e-5e02-4074-b444-43d7919d89b9",),
+                    requestable: true,
+                    id: None,
+                    hash: None,
+                    private: None,
+                    original: &jumbf[46..129],
+                },
+                child_boxes: vec![
+                    ChildBox::SuperBox(SuperBox {
+                        desc: DescriptionBox {
+                            uuid: &hex!("63 32 61 73 00 11 00 10 80 00 00 aa 00 38 9b 71"),
+                            label: Some("c2pa.assertions",),
+                            requestable: true,
+                            id: None,
+                            hash: None,
+                            private: None,
+                            original: &jumbf[137..178],
+                        },
+                        child_boxes: vec![
+                            ChildBox::SuperBox(SuperBox {
+                                desc: DescriptionBox {
+                                    uuid: &hex!("40 cb 0c 32 bb 8a 48 9d a7 0b 2a d6 f4 7f 43 69"),
+                                    label: Some("c2pa.thumbnail.claim.jpeg",),
+                                    requestable: true,
+                                    id: None,
+                                    hash: None,
+                                    private: None,
+                                    original: &jumbf[186..237],
+                                },
+                                child_boxes: vec![
+                                    ChildBox::DataBox(DataBox {
+                                        tbox: BoxType(*b"bfdb"),
+                                        data: &jumbf[245..257],
+                                        original: &jumbf[237..257],
+                                    },),
+                                    ChildBox::DataBox(DataBox {
+                                        tbox: BoxType(*b"bidb"),
+                                        data: &jumbf[265..31976],
+                                        original: &jumbf[257..31976],
+                                    },),
+                                ],
+                                original: &jumbf[178..31976],
+                            },),
+                            ChildBox::SuperBox(SuperBox {
+                                desc: DescriptionBox {
+                                    uuid: &hex!("6a 73 6f 6e 00 11 00 10 80 00 00 aa 00 38 9b 71"),
+                                    label: Some("stds.schema-org.CreativeWork",),
+                                    requestable: true,
+                                    id: None,
+                                    hash: None,
+                                    private: Some(DataBox {
+                                        tbox: BoxType(*b"c2sh"),
+                                        data: &jumbf[32046..32062],
+                                        original: &jumbf[32038..32062],
+                                    },),
+                                    original: &jumbf[31984..32062],
+                                },
+                                child_boxes: vec![ChildBox::DataBox(DataBox {
+                                    tbox: BoxType(*b"json"),
+                                    data: &jumbf[32070..32179],
+                                    original: &jumbf[32062..32179],
+                                },),],
+                                original: &jumbf[31976..32179],
+                            },),
+                            ChildBox::SuperBox(SuperBox {
+                                desc: DescriptionBox {
+                                    uuid: &hex!("63 62 6f 72 00 11 00 10 80 00 00 aa 00 38 9b 71"),
+                                    label: Some("c2pa.actions",),
+                                    requestable: true,
+                                    id: None,
+                                    hash: None,
+                                    private: None,
+                                    original: &jumbf[32187..32225],
+                                },
+                                child_boxes: vec![ChildBox::DataBox(DataBox {
+                                    tbox: BoxType(*b"cbor"),
+                                    data: &jumbf[32233..32311],
+                                    original: &jumbf[32225..32311],
+                                },),],
+                                original: &jumbf[32179..32311],
+                            },),
+                            ChildBox::SuperBox(SuperBox {
+                                desc: DescriptionBox {
+                                    uuid: &hex!("63 62 6f 72 00 11 00 10 80 00 00 aa 00 38 9b 71"),
+                                    label: Some("c2pa.hash.data",),
+                                    requestable: true,
+                                    id: None,
+                                    hash: None,
+                                    private: None,
+                                    original: &jumbf[32319..32359],
+                                },
+                                child_boxes: vec![ChildBox::DataBox(DataBox {
+                                    tbox: BoxType(*b"cbor"),
+                                    data: &jumbf[32367..32482],
+                                    original: &jumbf[32359..32482],
+                                },),],
+                                original: &jumbf[32311..32482],
+                            },),
+                        ],
+                        original: &jumbf[129..32482],
+                    },),
+                    ChildBox::SuperBox(SuperBox {
+                        desc: DescriptionBox {
+                            uuid: &hex!("63 32 63 6c 00 11 00 10 80 00 00 aa 00 38 9b 71"),
+                            label: Some("c2pa.claim",),
+                            requestable: true,
+                            id: None,
+                            hash: None,
+                            private: None,
+                            original: &jumbf[32490..32526],
+                        },
+                        child_boxes: vec![ChildBox::DataBox(DataBox {
+                            tbox: BoxType(*b"cbor"),
+                            data: &jumbf[32534..33166],
+                            original: &jumbf[32526..33166],
+                        },),],
+                        original: &jumbf[32482..33166],
+                    },),
+                    ChildBox::SuperBox(SuperBox {
+                        desc: DescriptionBox {
+                            uuid: &hex!("63 32 63 73 00 11 00 10 80 00 00 aa 00 38 9b 71"),
+                            label: Some("c2pa.signature",),
+                            requestable: true,
+                            id: None,
+                            hash: None,
+                            private: None,
+                            original: &jumbf[33174..33214],
+                        },
+                        child_boxes: vec![ChildBox::DataBox(DataBox {
+                            tbox: BoxType(*b"cbor"),
+                            data: &jumbf[33222..46948],
+                            original: &jumbf[33214..46948],
+                        },),],
+                        original: &jumbf[33166..46948],
+                    },),
+                ],
+                original: &jumbf[38..46948],
+            },),],
+            original: &jumbf[0..46948],
+        }
+    );
+}
