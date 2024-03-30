@@ -98,7 +98,7 @@ jobs:
         uses: Swatinem/rust-cache@v2
 
       - name: Run tests
-        run: cargo test --all-targets --no-default-features
+        run: cargo test --no-default-features
 
   test-direct-minimal-versions:
     name: Unit tests with minimum versions of direct dependencies
@@ -250,6 +250,28 @@ jobs:
         with:
           version: latest
           args: --all-targets --all-features
+
+  benchmarks:
+    name: Test performance on benchmarks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup rust toolchain, cache and cargo-codspeed binary
+        uses: moonrepo/setup-rust@v0
+        with:
+          channel: stable
+          cache-target: release
+          bins: cargo-codspeed
+
+      - name: Build the benchmark target(s)
+        run: cargo codspeed build
+
+      - name: Run the benchmarks
+        uses: CodSpeedHQ/action@v2
+        with:
+          run: cargo codspeed run
+          token: ${{ secrets.CODSPEED_TOKEN }}
 
   version_bump:
     name: Ensure (MINOR) tag is used when making an API breaking change

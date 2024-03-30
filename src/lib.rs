@@ -15,7 +15,7 @@
 #![deny(clippy::panic)]
 #![deny(clippy::unwrap_used)]
 #![deny(warnings)]
-#![doc = include_str!("../README.md")]
+#![cfg_attr(feature = "parser", doc = include_str!("../README.md"))]
 
 #[cfg(test)]
 mod tests;
