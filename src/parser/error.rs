@@ -31,7 +31,7 @@ pub enum Error<SE> {
     InvalidDescriptionBoxType(BoxType),
 
     /// UTF-8 decoding error.
-    #[error("Unable to decode description box as UTF-8: {0:?}")]
+    #[error("Unable to decode description box label as UTF-8: {0:?}")]
     Utf8Error(Utf8Error),
 
     /// Error from input source.

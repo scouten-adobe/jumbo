@@ -29,4 +29,4 @@ mod debug;
 #[cfg(feature = "parser")]
 pub mod parser;
 
-// mod toggles;
+mod toggles;
