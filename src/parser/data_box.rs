@@ -61,7 +61,7 @@ pub struct DataBox<S: Source> {
 impl<S: Source> DataBox<S> {
     /// Parse a JUMBF box, and return a tuple of the remainder of the input and
     /// the parsed box.
-    pub fn from_source(original: S) -> Result<(Self, S), crate::parser::Error<S::Error>> {
+    pub fn from_source(original: S) -> Result<(Self, S), Error<S::Error>> {
         let (len, i) = original.read_be32()?;
 
         let mut tbox = [0u8; 4];
