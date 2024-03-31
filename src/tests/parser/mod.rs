@@ -14,4 +14,4 @@
 mod data_box;
 mod description_box;
 mod super_box;
-// mod super_box_depth_limit;
+mod super_box_depth_limit;
