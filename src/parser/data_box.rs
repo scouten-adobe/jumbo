@@ -15,7 +15,7 @@ use std::fmt::{Debug, Formatter};
 
 use crate::{
     debug::*,
-    parser::{Error, Source /* SuperBox */},
+    parser::{Error, Source, SuperBox},
     BoxType,
 };
 
@@ -98,53 +98,40 @@ impl<S: Source> DataBox<S> {
         ))
     }
 
-    // /// Returns the offset of the *data* portion of this box within its
-    // /// enclosing [`SuperBox`].
-    // ///
-    // /// Will return `None` if this box is not a member of the [`SuperBox`].
-    // ///
-    // /// ## Example
-    // ///
-    // /// ```
-    // /// use hex_literal::hex;
-    // /// use jumbf::parser::SuperBox;
-    // ///
-    // /// let jumbf = hex!(
-    // ///     "00000077" // box size
-    // ///     "6a756d62" // box type = 'jumb'
-    // ///         "00000028" // box size
-    // ///         "6a756d64" // box type = 'jumd'
-    // ///         "6332637300110010800000aa00389b71" // UUID
-    // ///         "03" // toggles
-    // ///         "633270612e7369676e617475726500" // label
-    // ///         // ----
-    // ///         "00000047" // box size
-    // ///         "75756964" // box type = 'uuid'
-    // ///
-    // "6332637300110010800000aa00389b717468697320776f756c64206e6f726d616c6c792062652062696e617279207369676e617475726520646174612e2e2e"
-    // // data (type unknown) ///     );
-    // ///
-    // /// let (rem, sbox) = SuperBox::from_slice(&jumbf).unwrap();
-    // /// assert!(rem.is_empty());
-    // ///
-    // /// let uuid_box = sbox.data_box().unwrap();
-    // /// assert_eq!(uuid_box.offset_within_superbox(&sbox), Some(56));
-    // /// ```
-    // pub fn offset_within_superbox(&self, super_box: &SuperBox) -> Option<usize> {
-    //     let sbox_as_ptr = super_box.original.as_ptr() as usize;
-    //     let self_as_ptr = self.data.as_ptr() as usize;
-
-    //     if self_as_ptr < sbox_as_ptr {
-    //         return None;
-    //     }
-
-    //     let offset = self_as_ptr.wrapping_sub(sbox_as_ptr);
-    //     if offset + self.data.len() > super_box.original.len() {
-    //         None
-    //     } else {
-    //         Some(offset)
-    //     }
-    // }
+    /// Returns the offset of the *data* portion of this box within its
+    /// enclosing [`SuperBox`].
+    ///
+    /// Will return `None` if this box is not a member of the [`SuperBox`].
+    ///
+    /// ## Example
+    ///
+    /// ```
+    /// use hex_literal::hex;
+    /// use jumbf::parser::SuperBox;
+    ///
+    /// let jumbf = hex!(
+    ///     "00000077" // box size
+    ///     "6a756d62" // box type = 'jumb'
+    ///         "00000028" // box size
+    ///         "6a756d64" // box type = 'jumd'
+    ///         "6332637300110010800000aa00389b71" // UUID
+    ///         "03" // toggles
+    ///         "633270612e7369676e617475726500" // label
+    ///         // ----
+    ///         "00000047" // box size
+    ///         "75756964" // box type = 'uuid'
+    ///         "6332637300110010800000aa00389b717468697320776f756c64206e6f726d616c6c792062652062696e617279207369676e617475726520646174612e2e2e"    // data (type unknown)
+    ///     );
+    ///
+    /// let (sbox, rem) = SuperBox::from_source(jumbf.as_slice()).unwrap();
+    /// assert!(rem.is_empty());
+    ///
+    /// let uuid_box = sbox.data_box().unwrap();
+    /// assert_eq!(uuid_box.offset_within_superbox(&sbox), Some(56));
+    /// ```
+    pub fn offset_within_superbox(&self, super_box: &SuperBox<S>) -> Option<usize> {
+        super_box.original.offset_of_subsource(&self.data)
+    }
 }
 
 impl<S: Source + Debug> Debug for DataBox<S> {

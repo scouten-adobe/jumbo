@@ -154,8 +154,8 @@ fn data_box_sample() {
         }
     );
 
-    // let uuid_box = sbox.data_box().unwrap();
-    // assert_eq!(uuid_box.offset_within_superbox(&sbox).unwrap(), 56);
+    let uuid_box = sbox.data_box().unwrap();
+    assert_eq!(uuid_box.offset_within_superbox(&sbox).unwrap(), 56);
 }
 
 #[test]
@@ -410,13 +410,13 @@ fn complex_example() {
         })
     );
 
-    // assert_eq!(
-    //     sbox.find_by_label("cb.adobe_1/c2pa.signature")
-    //         .and_then(|sig| sig.data_box())
-    //         .and_then(|sig| sig.offset_within_superbox(&sbox))
-    //         .unwrap(),
-    //     552
-    // );
+    assert_eq!(
+        sbox.find_by_label("cb.adobe_1/c2pa.signature")
+            .and_then(|sig| sig.data_box())
+            .and_then(|sig| sig.offset_within_superbox(&sbox))
+            .unwrap(),
+        552
+    );
 
     assert_eq!(sbox.data_box(), None);
 }

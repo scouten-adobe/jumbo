@@ -24,7 +24,7 @@ pub trait Source: Debug + Sized {
     fn len(&self) -> usize;
 
     fn split_at(&self, len: usize) -> Result<(Self, Self), Self::Error>;
-    fn offset_of_subsource(&self, subsource: Self) -> Option<usize>;
+    fn offset_of_subsource(&self, subsource: &Self) -> Option<usize>;
 
     fn read_be32(&self) -> Result<(u32, Self), Self::Error> {
         let mut b = [0u8; 4];
@@ -111,7 +111,19 @@ impl Source for &[u8] {
         Ok((wanted, remainder))
     }
 
-    fn offset_of_subsource(&self, _subsource: Self) -> Option<usize> {
-        unimplemented!();
+    fn offset_of_subsource(&self, subsource: &Self) -> Option<usize> {
+        let self_as_ptr = self.as_ptr() as usize;
+        let sub_as_ptr = subsource.as_ptr() as usize;
+
+        if sub_as_ptr < self_as_ptr {
+            return None;
+        }
+
+        let offset = sub_as_ptr.wrapping_sub(self_as_ptr);
+        if offset + subsource.len() > self.len() {
+            None
+        } else {
+            Some(offset)
+        }
     }
 }
