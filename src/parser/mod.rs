@@ -19,9 +19,11 @@
 mod data_box;
 // mod description_box;
 mod error;
-// mod super_box;
 
+mod source;
+// mod super_box;
 pub use data_box::DataBox;
 // pub use description_box::DescriptionBox;
-pub use error::{Error, ParseResult};
+pub use error::Error;
+pub use source::Source;
 // pub use super_box::{ChildBox, SuperBox};
