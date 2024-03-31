@@ -25,5 +25,5 @@ mod source;
 pub use data_box::DataBox;
 // pub use description_box::DescriptionBox;
 pub use error::Error;
-pub use source::Source;
+pub use source::{ReadPastEndOfSlice, Source};
 // pub use super_box::{ChildBox, SuperBox};

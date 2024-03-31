@@ -13,11 +13,11 @@
 
 use std::str::Utf8Error;
 
-use crate::{parser::Source, BoxType};
+use crate::BoxType;
 
 /// The error type for JUMBF parsing operations.
 #[derive(Clone, Debug, thiserror::Error, PartialEq, Eq)]
-pub enum Error<S: Source> {
+pub enum Error<SE> {
     /// Invalid length value.
     #[error("Box length value {0} is reserved")]
     InvalidBoxLength(u32),
@@ -36,5 +36,5 @@ pub enum Error<S: Source> {
 
     /// Error from input source.
     #[error("Error from input source: {0:?}")]
-    SourceError(S::Error),
+    SourceError(SE),
 }

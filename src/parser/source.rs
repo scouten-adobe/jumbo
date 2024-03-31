@@ -1,3 +1,16 @@
+// Copyright 2024 Adobe. All rights reserved.
+// This file is licensed to you under the Apache License,
+// Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
+// or the MIT license (http://opensource.org/licenses/MIT),
+// at your option.
+
+// Unless required by applicable law or agreed to in writing,
+// this software is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR REPRESENTATIONS OF ANY KIND, either express or
+// implied. See the LICENSE-MIT and LICENSE-APACHE files for the
+// specific language governing permissions and limitations under
+// each license.
+
 use std::{
     error::Error,
     fmt::{Debug, Display, Formatter},
@@ -39,10 +52,10 @@ pub trait Source: Debug + Sized {
 }
 
 /// Returned when trying to read past the end of a slice.
-#[derive(Debug)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ReadPastEndOfSlice {
-    wanted: usize,
-    have: usize,
+    pub wanted: usize,
+    pub have: usize,
 }
 
 impl Display for ReadPastEndOfSlice {
