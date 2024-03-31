@@ -11,8 +11,19 @@
 // specific language governing permissions and limitations under
 // each license.
 
-mod data_box;
-mod description_box;
-mod source;
-mod super_box;
-mod super_box_depth_limit;
+mod read_past_end_of_slice {
+    use crate::parser::ReadPastEndOfSlice;
+
+    #[test]
+    fn impl_display() {
+        let err = ReadPastEndOfSlice {
+            wanted: 27,
+            have: 24,
+        };
+
+        assert_eq!(
+            err.to_string(),
+            "Read past end of slice (wanted 27 bytes, have 24 bytes)"
+        );
+    }
+}
