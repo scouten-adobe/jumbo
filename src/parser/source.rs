@@ -1,4 +1,7 @@
-use std::fmt::Debug;
+use std::{
+    error::Error,
+    fmt::{Debug, Display, Formatter},
+};
 
 pub trait Source: Debug + Sized {
     type Error: Debug;
@@ -37,14 +40,33 @@ pub trait Source: Debug + Sized {
 
 /// Returned when trying to read past the end of a slice.
 #[derive(Debug)]
-pub struct UnexpectedEof;
+pub struct ReadPastEndOfSlice {
+    wanted: usize,
+    have: usize,
+}
+
+impl Display for ReadPastEndOfSlice {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "Read past end of slice (wanted {wanted} bytes, have {have} bytes)",
+            wanted = self.wanted,
+            have = self.have
+        )
+    }
+}
+
+impl Error for ReadPastEndOfSlice {}
 
 impl Source for &[u8] {
-    type Error = UnexpectedEof;
+    type Error = ReadPastEndOfSlice;
 
     fn read_bytes(&self, data: &mut [u8]) -> Result<Self, Self::Error> {
         if data.len() > self.len() {
-            return Err(UnexpectedEof);
+            return Err(ReadPastEndOfSlice {
+                wanted: data.len(),
+                have: self.len(),
+            });
         }
 
         let self_as_u8: &[u8] = self;
@@ -65,7 +87,10 @@ impl Source for &[u8] {
 
     fn split_at(&self, len: usize) -> Result<(Self, Self), Self::Error> {
         if len > self.len() {
-            return Err(UnexpectedEof);
+            return Err(ReadPastEndOfSlice {
+                wanted: len,
+                have: self.len(),
+            });
         }
 
         let self_as_u8: &[u8] = self;
