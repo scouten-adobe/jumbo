@@ -26,13 +26,21 @@ pub trait Source: Debug + Sized {
     fn split_at(&self, len: usize) -> Result<(Self, Self), Self::Error>;
     fn offset_of_subsource(&self, subsource: &Self) -> Option<usize>;
 
+    fn read_u8(&self) -> Result<(u8, Self), Self::Error>;
+
     fn read_be32(&self) -> Result<(u32, Self), Self::Error> {
-        let mut b = [0u8; 4];
-        let remainder = self.read_bytes(&mut b)?;
+        let (be32, remainder) = self.split_at(4)?;
 
         let mut res = 0u32;
-        for byte in b {
-            res = (res << 8) + byte as u32;
+        let mut i = be32;
+
+        loop {
+            if let Ok((byte, x)) = i.read_u8() {
+                i = x;
+                res = (res << 8) + byte as u32;
+            } else {
+                break;
+            }
         }
 
         Ok((res, remainder))
@@ -96,6 +104,13 @@ impl Source for &[u8] {
     fn len(&self) -> usize {
         let self_as_u8: &[u8] = self;
         self_as_u8.len()
+    }
+
+    fn read_u8(&self) -> Result<(u8, Self), Self::Error> {
+        match self.split_first() {
+            Some((byte, rem)) => Ok((*byte, rem)),
+            None => Err(ReadPastEndOfSlice { wanted: 1, have: 0 }),
+        }
     }
 
     fn split_at(&self, len: usize) -> Result<(Self, Self), Self::Error> {
