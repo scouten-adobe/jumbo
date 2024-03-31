@@ -57,6 +57,10 @@ pub trait Source: Debug + Sized {
 
         Ok((res, remainder))
     }
+
+    fn split_at_null(&self) -> Result<(Self, Self), Self::Error> {
+        unimplemented!();
+    }
 }
 
 /// Returned when trying to read past the end of a slice.
@@ -140,5 +144,18 @@ impl Source for &[u8] {
         } else {
             Some(offset)
         }
+    }
+
+    fn split_at_null(&self) -> Result<(Self, Self), Self::Error> {
+        let mut i = 0usize;
+        for b in self.iter() {
+            i = i + 1;
+            if *b == 0 {
+                let (wanted, remainder) = self.split_at(i)?;
+                return Ok((&wanted[0..wanted.len() - 1], remainder));
+            }
+        }
+
+        Err(ReadPastEndOfSlice { wanted: 1, have: 0 })
     }
 }

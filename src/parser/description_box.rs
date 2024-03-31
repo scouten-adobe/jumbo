@@ -96,21 +96,12 @@ impl<S: Source> DescriptionBox<S> {
 
         // Toggle bit 1 (0x02) indicates that the label has an optional textual label.
         let (label, i) = if toggles & toggles::HAS_LABEL != 0 {
-            let mut i = i;
-            let mut c = [0u8];
-            let mut label: Vec<u8> = vec![];
+            let (label, i) = i.split_at_null()?;
 
-            loop {
-                i = i.read_bytes(&mut c)?;
-                let c = c[0];
-                if c == 0 {
-                    break;
-                } else {
-                    label.push(c);
-                }
-            }
+            let mut label_utf8 = vec![0u8; label.len()];
+            label.read_bytes(&mut label_utf8)?;
 
-            let label = from_utf8(&label).map_err(Error::Utf8Error)?;
+            let label = from_utf8(&label_utf8).map_err(Error::Utf8Error)?;
             (Some(label.to_owned()), i)
         } else {
             (None, i)
