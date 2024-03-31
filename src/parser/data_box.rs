@@ -81,10 +81,11 @@ impl<S: Source> DataBox<S> {
             2..=7 => {
                 return Err(Error::InvalidBoxLength(len));
             }
-            len => (len as usize, i),
+            len => (len as usize - 8, i),
         };
 
         let (data, i) = i.split_at(len).map_err(wrap_source_error)?;
+
         let (original, i) = original
             .split_at(original.len() - i.len())
             .map_err(wrap_source_error)?;
