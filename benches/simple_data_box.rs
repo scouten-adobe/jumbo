@@ -1,4 +1,4 @@
-use codspeed_criterion_compat::{criterion_group, criterion_main, Criterion};
+use codspeed_criterion_compat::{black_box, criterion_group, criterion_main, Criterion};
 use hex_literal::hex;
 use jumbf::parser::DataBox;
 
@@ -12,7 +12,7 @@ const SIMPLE_BOX: [u8; 38] = hex!(
 
 pub fn simple_parse(c: &mut Criterion) {
     c.bench_function("simple data box", |b| {
-        b.iter(|| DataBox::from_slice(&SIMPLE_BOX).unwrap());
+        b.iter(|| DataBox::from_slice(black_box(&SIMPLE_BOX)).unwrap());
     });
 }
 
