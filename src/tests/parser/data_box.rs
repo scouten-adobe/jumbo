@@ -57,7 +57,9 @@ fn error_incomplete_box_length() {
 
     assert_eq!(
         DataBox::from_source(jumbf.as_slice()).unwrap_err(),
-        Error::SourceError(ReadPastEndOfSlice { wanted: 4, have: 3 })
+        Error::SourceError {
+            source: ReadPastEndOfSlice { wanted: 4, have: 3 }
+        }
     );
 }
 
@@ -70,7 +72,9 @@ fn error_incomplete_box_type() {
 
     assert_eq!(
         DataBox::from_source(jumbf.as_slice()).unwrap_err(),
-        Error::SourceError(ReadPastEndOfSlice { wanted: 4, have: 3 })
+        Error::SourceError {
+            source: ReadPastEndOfSlice { wanted: 4, have: 3 }
+        }
     );
 }
 
@@ -169,10 +173,12 @@ fn error_incorrect_length() {
 
     assert_eq!(
         DataBox::from_source(jumbf.as_slice()).unwrap_err(),
-        Error::SourceError(ReadPastEndOfSlice {
-            wanted: 30,
-            have: 17
-        })
+        Error::SourceError {
+            source: ReadPastEndOfSlice {
+                wanted: 30,
+                have: 17
+            }
+        }
     );
 }
 

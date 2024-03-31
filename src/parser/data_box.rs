@@ -62,16 +62,16 @@ impl<S: Source> DataBox<S> {
     /// Parse a JUMBF box, and return a tuple of the remainder of the input and
     /// the parsed box.
     pub fn from_source(original: S) -> Result<(Self, S), crate::parser::Error<S::Error>> {
-        let (len, i) = original.read_be32().map_err(wrap_source_error::<S>)?;
+        let (len, i) = original.read_be32()?;
 
         let mut tbox = [0u8; 4];
-        let i = i.read_bytes(&mut tbox).map_err(wrap_source_error::<S>)?;
+        let i = i.read_bytes(&mut tbox)?;
         let tbox: BoxType = tbox.as_slice().into();
 
         let (len, i) = match len {
             0 => (i.len(), i),
             1 => {
-                let (len, i) = i.read_be64().map_err(wrap_source_error::<S>)?;
+                let (len, i) = i.read_be64()?;
                 if len >= 16 {
                     (len as usize - 16, i)
                 } else {
@@ -84,11 +84,9 @@ impl<S: Source> DataBox<S> {
             len => (len as usize - 8, i),
         };
 
-        let (data, i) = i.split_at(len).map_err(wrap_source_error::<S>)?;
+        let (data, i) = i.split_at(len)?;
 
-        let (original, i) = original
-            .split_at(original.len() - i.len())
-            .map_err(wrap_source_error::<S>)?;
+        let (original, i) = original.split_at(original.len() - i.len())?;
 
         Ok((
             Self {
@@ -147,10 +145,6 @@ impl<S: Source> DataBox<S> {
     //         Some(offset)
     //     }
     // }
-}
-
-fn wrap_source_error<S: Source>(err: S::Error) -> crate::parser::Error<S::Error> {
-    Error::SourceError(err)
 }
 
 impl<S: Source + Debug> Debug for DataBox<S> {

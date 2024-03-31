@@ -35,6 +35,9 @@ pub enum Error<SE> {
     Utf8Error(Utf8Error),
 
     /// Error from input source.
-    #[error("Error from input source: {0:?}")]
-    SourceError(SE),
+    #[error("Error from input source: {source:?}")]
+    SourceError {
+        #[from]
+        source: SE,
+    },
 }
