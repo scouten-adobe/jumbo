@@ -30,13 +30,13 @@ _28 September 2024_
 ## 0.4.0
 _27 March 2024_
 
-* (MINOR) Add ChildBox.as_super_box() and .as_data_box() methods ([#7](https://github.com/scouten-adobe/jumbf-rs/pull/7))
+* Add `ChildBox.as_super_box()` and `.as_data_box()` methods ([#7](https://github.com/scouten-adobe/jumbf-rs/pull/7))
 
 ## 0.3.0
 _22 March 2024_
 
-* Add an example for offset_within_superbox ([#6](https://github.com/scouten-adobe/jumbf-rs/pull/6))
-* (MINOR) DataBox: Add new function offset_within_superbox ([#5](https://github.com/scouten-adobe/jumbf-rs/pull/5))
+* Add an example for 1offset_within_superbox` ([#6](https://github.com/scouten-adobe/jumbf-rs/pull/6))
+* `DataBox`: Add new function `offset_within_superbox` ([#5](https://github.com/scouten-adobe/jumbf-rs/pull/5))
 
 ## 0.2.2
 _13 March 2024_
@@ -52,9 +52,9 @@ _13 March 2024_
 _13 March 2024_
 
 * Add ability to limit recursion when parsing superboxes ([#3](https://github.com/scouten-adobe/jumbf-rs/pull/3))
-* (MINOR) Change `SuperBox::from_box` to `SuperBox::from_data_box` ([#4](https://github.com/scouten-adobe/jumbf-rs/pull/4))
+* Change `SuperBox::from_box` to `SuperBox::from_data_box` ([#4](https://github.com/scouten-adobe/jumbf-rs/pull/4))
 * Add more examples to readme
-* (MINOR) Rename `Box` to `DataBox` ([#1](https://github.com/scouten-adobe/jumbf-rs/pull/1))
+* Rename `Box` to `DataBox` ([#1](https://github.com/scouten-adobe/jumbf-rs/pull/1))
 
 ## 0.1.0
 _12 March 2024_
