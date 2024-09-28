@@ -7,7 +7,7 @@ _{{ timestamp | date(format="%d %B %Y") }}_
 {% if group != "chore" -%}
 ### {{ group | upper_first }}
 
-{%- for commit in commits %}
+{% for commit in commits -%}
 {%- if commit.scope and commit.scope != package -%}
 * *({{commit.scope}})* {% if commit.breaking %}[**breaking**] {% endif %}{{ commit.message | upper_first }}{%- if commit.links %} ({% for link in commit.links %}[{{link.text}}]({{link.href}}) {% endfor -%}){% endif %}
 {% else -%}
