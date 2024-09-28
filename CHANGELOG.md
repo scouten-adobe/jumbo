@@ -6,6 +6,22 @@ This project adheres to [Semantic Versioning](https://semver.org), except that â
 
 Since version 0.4.1, the format of this changelog is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.4.1](https://github.com/scouten-adobe/jumbf-rs/compare/v0.4.0...v0.4.1)
+_28 September 2024_
+
+### Fixed
+
+* Only test `mod debug` with feature `parser`
+* Only compile `mod debug` on feature `parser`
+* Elided lifetimes must be explicit in Rust nightly
+
+### Other
+
+* Fix benchmark invocations ([#12](https://github.com/scouten-adobe/jumbf-rs/pull/12))
+* Add two parsing benchmarks ([#9](https://github.com/scouten-adobe/jumbf-rs/pull/9))
+* (IGNORE) Add example of parsing a more complex data structure ([#10](https://github.com/scouten-adobe/jumbf-rs/pull/10))
+* (IGNORE) Update for recent changes to cargo-deny ([#8](https://github.com/scouten-adobe/jumbf-rs/pull/8))
+
 ## 0.4.0
 _27 March 2024_
 
