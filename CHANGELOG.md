@@ -1,6 +1,6 @@
 # Changelog
 
-All changes to this project are documented in this file.
+All notable changes to this project are documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org), except that – as is typical in the Rust community – the minimum supported Rust version may be increased without a major version increase.
 
@@ -14,13 +14,18 @@ _28 September 2024_
 * Only test `mod debug` with feature `parser`
 * Only compile `mod debug` on feature `parser`
 * Elided lifetimes must be explicit in Rust nightly
+* Fix benchmark invocations ([#12](https://github.com/scouten-adobe/jumbf-rs/pull/12))
 
 ### Other
 
-* Fix benchmark invocations ([#12](https://github.com/scouten-adobe/jumbf-rs/pull/12))
 * Add two parsing benchmarks ([#9](https://github.com/scouten-adobe/jumbf-rs/pull/9))
-* (IGNORE) Add example of parsing a more complex data structure ([#10](https://github.com/scouten-adobe/jumbf-rs/pull/10))
-* (IGNORE) Update for recent changes to cargo-deny ([#8](https://github.com/scouten-adobe/jumbf-rs/pull/8))
+* Numerous changes to build infrastructure
+  * Start using [release-plz](https://release-plz.ieni.dev) for release management
+  * Start using [commitlint-rs](https://keisukeyamashita.github.io/commitlint-rs/) for PR title validation
+  * Start using Dependabot to track GitHub Actions upgrades
+  * Update to latest version of cargo-deny, actions/checkout, codecov/codecov-action, CodSpeedHQ/action
+  * Remove deprecated actions-rs/clippy-check action
+  * Remove nightly build task
 
 ## 0.4.0
 _27 March 2024_
