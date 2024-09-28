@@ -6,7 +6,7 @@ _{{ timestamp | date(format="%d %B %Y") }}_
 {% for group, commits in commits | group_by(attribute="group") %}
 ### {{ group | upper_first }}
 {% for commit in commits %}
-{%- if commit.scope -%}
+{%- if commit.scope and commit.scope != package -%}
 * *({{commit.scope}})* {% if commit.breaking %}[**breaking**] {% endif %}{{ commit.message }}{%- if commit.links %} ({% for link in commit.links %}[{{link.text}}]({{link.href}}) {% endfor -%}){% endif %}
 {% else -%}
 * {% if commit.breaking %}[**breaking**] {% endif %}{{ commit.message }}
@@ -16,4 +16,7 @@ _{{ timestamp | date(format="%d %B %Y") }}_
 """
 
 [workspace]
+dependencies_update = true
+features_always_increment_minor = true
+release_always = false
 release_commits = "^(feat|fix)[(:]"
