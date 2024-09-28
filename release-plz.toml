@@ -13,7 +13,7 @@ _{{ timestamp | date(format="%d %B %Y") }}_
 * {% if commit.breaking %}[**breaking**] {% endif %}{{ commit.message | upper_first }}
 {% endif -%}
 {% endfor -%}
-{%- endif -%}
+{% endif -%}
 {% endfor %}
 """
 
