@@ -11,12 +11,15 @@ targets = [
     { triple = "aarch64-apple-darwin" },
 ]
 
-# Deny multiple versions unless explicitly skipped.
+[advisories]
+version = 2
+
 [bans]
-multiple-versions = "allow" # "deny" # TODO: Re-enable when possible.
+multiple-versions = "deny"
 wildcards = "allow"
 
 [licenses]
+version = 2
 allow = [
   "Apache-2.0",
   # "BSD-2-Clause",
@@ -33,5 +36,3 @@ confidence-threshold = 0.9
 [sources]
 unknown-registry = "deny"
 unknown-git = "deny"
-allow-registry = ["https://github.com/rust-lang/crates.io-index"]
-allow-git = []

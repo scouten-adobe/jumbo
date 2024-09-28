@@ -17,7 +17,7 @@ default = ["parser"]
 parser = ["nom", "thiserror"]
 
 [dependencies]
-nom = { version = "7.1", optional = true, default_features = false, features = ["std"] }
+nom = { version = "7.1", optional = true, default-features = false, features = ["std"] }
 thiserror = { version = "1.0.58", optional = true }
 
 [dev-dependencies]
