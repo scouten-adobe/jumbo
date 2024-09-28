@@ -8,9 +8,9 @@ _{{ timestamp | date(format="%d %B %Y") }}_
 ### {{ group | upper_first }}
 {% for commit in commits %}
 {%- if commit.scope and commit.scope != package -%}
-* *({{commit.scope}})* {% if commit.breaking %}[**breaking**] {% endif %}{{ upper_first(commit.message) }}{%- if commit.links %} ({% for link in commit.links %}[{{link.text}}]({{link.href}}) {% endfor -%}){% endif %}
+* *({{commit.scope}})* {% if commit.breaking %}[**breaking**] {% endif %}{{ commit.message | upper_first }}{%- if commit.links %} ({% for link in commit.links %}[{{link.text}}]({{link.href}}) {% endfor -%}){% endif %}
 {% else -%}
-* {% if commit.breaking %}[**breaking**] {% endif %}{{ upper_first(commit.message) }}
+* {% if commit.breaking %}[**breaking**] {% endif %}{{ commit.message | upper_first }}
 {% endif -%}
 {%- endif -%}
 {% endfor -%}
