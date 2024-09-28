@@ -16,7 +16,7 @@ version = 2
 
 [bans]
 multiple-versions = "deny"
-wildcards = "allow"
+wildcards = "deny"
 
 [licenses]
 version = 2
