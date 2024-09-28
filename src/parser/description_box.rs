@@ -69,7 +69,7 @@ impl<'a> DescriptionBox<'a> {
     ///
     /// The returned object uses zero-copy, and so has the same lifetime as the
     /// input.
-    pub fn from_slice(i: &'a [u8]) -> ParseResult<Self> {
+    pub fn from_slice(i: &'a [u8]) -> ParseResult<'a, Self> {
         let (i, boxx): (&'a [u8], DataBox<'a>) = DataBox::from_slice(i)?;
         let (_, desc) = Self::from_box(boxx)?;
         Ok((i, desc))
