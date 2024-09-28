@@ -20,6 +20,8 @@
 
 mod box_type;
 mod builder;
+
+#[cfg(feature = "parser")]
 mod debug;
 
 #[cfg(feature = "parser")]
