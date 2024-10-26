@@ -92,7 +92,7 @@ impl<S: Source> DataBox<S> {
             Self {
                 tbox,
                 data,
-                original: original,
+                original,
             },
             i,
         ))

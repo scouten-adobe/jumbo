@@ -124,7 +124,7 @@ fn depth_limit_0() {
                 original: &JUMBF[38..615],
                 data: &JUMBF[46..615],
             })),
-            original: &JUMBF,
+            original: JUMBF,
         }
     );
 
@@ -301,7 +301,7 @@ fn depth_limit_1() {
                 ),
                 original: &JUMBF[38..615],
             })),
-            original: &JUMBF,
+            original: JUMBF,
         }
     );
 
@@ -414,7 +414,7 @@ fn depth_limit_2() {
                 ),
                 original: &JUMBF[38..615],
             })),
-            original: &JUMBF,
+            original: JUMBF,
         }
     );
 
@@ -589,7 +589,7 @@ fn depth_limit_3() {
                 ),
                 original: &JUMBF[38..615],
             })),
-            original: &JUMBF,
+            original: JUMBF,
         }
     );
 
