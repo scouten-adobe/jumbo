@@ -2,7 +2,7 @@ rules:
   # Body may be empty
   body-empty:
     level: ignore
-  
+
   # Description must not be empty
   description-empty:
     level: error
@@ -17,10 +17,9 @@ rules:
     level: warning
     length: 70
 
-  # Scope is not allowed
-  scope:
-    level: error
-    options: []
+  # Scope may be empty
+  scope-empty:
+    level: ignore
 
   # Subject line should exist
   subject-empty:
