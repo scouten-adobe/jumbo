@@ -9,7 +9,9 @@ targets = [
     { triple = "x86_64-apple-darwin" },
     { triple = "x86_64-pc-windows-msvc" },
     { triple = "aarch64-apple-darwin" },
+    { triple = "wasm32-unknown-unknown" },
 ]
+exclude-dev = true
 
 [advisories]
 version = 2

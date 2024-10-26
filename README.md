@@ -2,7 +2,7 @@
 
 A [JUMBF (ISO/IEC 19566-5:2023)] parser and builder written in pure Rust.
 
-[![CI](https://github.com/scouten-adobe/jumbf-rs/actions/workflows/ci.yml/badge.svg)](https://github.com/scouten-adobe/jumbf-rs/actions/workflows/ci.yml)  [![Latest Version](https://img.shields.io/crates/v/jumbf.svg)](https://crates.io/crates/jumbf) [![docs.rs](https://img.shields.io/docsrs/jumbf)](https://docs.rs/jumbf/latest/jumbf/) [![codecov](https://codecov.io/gh/scouten-adobe/jumbf-rs/graph/badge.svg?token=di7n9t9B80)](https://codecov.io/gh/scouten-adobe/jumbf-rs)
+[![CI](https://github.com/scouten-adobe/jumbf-rs/actions/workflows/ci.yml/badge.svg)](https://github.com/scouten-adobe/jumbf-rs/actions/workflows/ci.yml) [![Latest Version](https://img.shields.io/crates/v/jumbf.svg)](https://crates.io/crates/jumbf) [![docs.rs](https://img.shields.io/docsrs/jumbf)](https://docs.rs/jumbf/latest/jumbf/) [![codecov](https://codecov.io/gh/scouten-adobe/jumbf-rs/graph/badge.svg?token=di7n9t9B80)](https://codecov.io/gh/scouten-adobe/jumbf-rs) [![CodSpeed](https://img.shields.io/endpoint?url=https://codspeed.io/badge.json)](https://codspeed.io/scouten-adobe/jumbf-rs)
 
 ## Parser
 

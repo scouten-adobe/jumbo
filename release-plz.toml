@@ -3,8 +3,8 @@ body = """
 
 ## [{{ version | trim_start_matches(pat="v") }}]{%- if release_link -%}({{ release_link }}){% endif %}
 _{{ timestamp | date(format="%d %B %Y") }}_
-{%- for group, commits in commits | group_by(attribute="group") %}
-{% if group != "chore" -%}
+{% for group, commits in commits | group_by(attribute="group") -%}
+{%- if group != "chore" %}
 ### {{ group | upper_first }}
 
 {% for commit in commits -%}
@@ -13,9 +13,11 @@ _{{ timestamp | date(format="%d %B %Y") }}_
 {% else -%}
 * {% if commit.breaking %}[**breaking**] {% endif %}{{ commit.message | upper_first }}
 {% endif -%}
-{% endfor -%}
-{% endif -%}
-{% endfor %}
+{%- endfor %}
+
+{%- endif %}
+
+{%- endfor -%}
 """
 
 commit_parsers = [
@@ -25,11 +27,14 @@ commit_parsers = [
   { message = "^fix", group = "fixed" },
   { message = "^security", group = "security" },
   { message = "^chore", group = "chore" },
+  { message = "^update", group = "updated dependencies" },
+  { message = "^doc", group = "documented" },
   { message = "^.*", group = "other" },
 ]
 
 [workspace]
 dependencies_update = true
 features_always_increment_minor = true
+pr_labels = ["release"]
 release_always = false
-release_commits = "^(feat|fix)[(:]"
+release_commits = "^(feat|fix|update|doc)[(:]"
