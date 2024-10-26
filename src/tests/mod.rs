@@ -22,5 +22,4 @@ mod box_type;
 // mod builder;
 mod debug;
 
-#[cfg(feature = "parser")]
 mod parser;
