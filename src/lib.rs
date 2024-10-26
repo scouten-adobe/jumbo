@@ -24,6 +24,8 @@ mod box_type;
 pub use box_type::BoxType;
 
 pub mod builder;
+
+#[cfg(feature = "parser")]
 mod debug;
 
 #[cfg(feature = "parser")]

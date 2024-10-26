@@ -46,7 +46,7 @@ impl<'a> SuperBox<'a> {
     ///
     /// The returned object uses zero-copy, and so has the same lifetime as the
     /// input.
-    pub fn from_slice(i: &'a [u8]) -> ParseResult<Self> {
+    pub fn from_slice(i: &'a [u8]) -> ParseResult<'a, Self> {
         Self::from_slice_with_depth_limit(i, usize::MAX)
     }
 
@@ -60,7 +60,7 @@ impl<'a> SuperBox<'a> {
     ///
     /// The returned object uses zero-copy, and so has the same lifetime as the
     /// input.
-    pub fn from_slice_with_depth_limit(i: &'a [u8], depth_limit: usize) -> ParseResult<Self> {
+    pub fn from_slice_with_depth_limit(i: &'a [u8], depth_limit: usize) -> ParseResult<'a, Self> {
         let (i, data_box): (&'a [u8], DataBox<'a>) = DataBox::from_slice(i)?;
         let (_, sbox) = Self::from_data_box_with_depth_limit(&data_box, depth_limit)?;
         Ok((i, sbox))

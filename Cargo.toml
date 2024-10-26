@@ -1,15 +1,15 @@
 [package]
 name = "jumbf"
-version = "0.4.0"
+version = "0.4.1"
 description = "A JUMBF (ISO/IEC 19566-5:2023) parser and builder written in pure Rust."
-repository = "https://github.com/scouten-adobe/jumbf-rs"
-documentation = "https://docs.rs/jumbf"
-readme = "README.md"
 authors = ["Eric Scouten <scouten@adobe.com>"]
+license = "MIT OR Apache-2.0"
+documentation = "https://docs.rs/jumbf"
+repository = "https://github.com/scouten-adobe/jumbf-rs"
+readme = "README.md"
+edition = "2021"
 keywords = ["jumbf"]
 categories = ["parsing"]
-license = "MIT OR Apache-2.0"
-edition = "2021"
 rust-version = "1.74.0"
 
 [features]
@@ -17,7 +17,7 @@ default = ["parser"]
 parser = ["nom", "thiserror"]
 
 [dependencies]
-nom = { version = "7.1", optional = true, default_features = false, features = ["std"] }
+nom = { version = "7.1", optional = true, default-features = false, features = ["std"] }
 thiserror = { version = "1.0.58", optional = true }
 
 [dev-dependencies]

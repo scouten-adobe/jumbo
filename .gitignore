@@ -1,12 +1,6 @@
-/target/
-
-Cargo.lock
-
-**/*.rs.bk
-
 .DS_Store
-.idea
-
 .vscode
-
+**/*.rs.bk
 /semver-checks/target/
+/target/
+Cargo.lock

@@ -69,7 +69,7 @@ impl<'a> DataBox<'a> {
     ///
     /// The returned object uses zero-copy, and so has the same lifetime as the
     /// input.
-    pub fn from_slice(original: &'a [u8]) -> ParseResult<Self> {
+    pub fn from_slice(original: &'a [u8]) -> ParseResult<'a, Self> {
         let (i, len) = be_u32(original)?;
 
         let (i, tbox): (&'a [u8], BoxType) = if i.len() >= 4 {
