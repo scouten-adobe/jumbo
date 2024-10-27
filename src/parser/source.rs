@@ -21,6 +21,7 @@ pub trait Source: Debug + Sized {
 
     fn read_bytes(&self, data: &mut [u8]) -> Result<Self, Self::Error>;
     fn as_bytes(&self) -> Result<Vec<u8>, Self::Error>;
+    fn as_slice<'a>(&'a self) -> &'a [u8];
 
     fn len(&self) -> usize;
     fn is_empty(&self) -> bool {
@@ -33,9 +34,15 @@ pub trait Source: Debug + Sized {
     fn read_u8(&self) -> Result<(u8, Self), Self::Error>;
 
     fn read_be32(&self) -> Result<(u32, Self), Self::Error> {
-        let mut b = [0u8; 4];
-        let remainder = self.read_bytes(&mut b)?;
-        Ok((u32::from_be_bytes(b), remainder))
+        let (b, rem) = self.split_at(4)?;
+        let b = b.as_slice();
+
+        // SAFETY: self.split_at should have returned an Err
+        // if unable to find 4 bytes.
+        #[allow(clippy::unwrap_used)]
+        let b: [u8; 4] = b.try_into().unwrap();
+
+        Ok((u32::from_be_bytes(b), rem))
     }
 
     fn read_be64(&self) -> Result<(u64, Self), Self::Error> {
@@ -89,6 +96,10 @@ impl Source for &[u8] {
     fn as_bytes(&self) -> Result<Vec<u8>, Self::Error> {
         // Replace with COW
         Ok(self.to_vec())
+    }
+
+    fn as_slice<'a>(&'a self) -> &'a [u8] {
+        self
     }
 
     fn len(&self) -> usize {
