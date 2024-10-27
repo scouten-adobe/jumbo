@@ -38,13 +38,9 @@ pub trait Source: Debug + Sized {
         let mut res = 0u32;
         let mut i = be32;
 
-        loop {
-            if let Ok((byte, x)) = i.read_u8() {
-                i = x;
-                res = (res << 8) + byte as u32;
-            } else {
-                break;
-            }
+        while let Ok((byte, x)) = i.read_u8() {
+            i = x;
+            res = (res << 8) + byte as u32;
         }
 
         Ok((res, remainder))
