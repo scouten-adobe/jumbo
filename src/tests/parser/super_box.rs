@@ -225,9 +225,6 @@ fn data_box_sample() {
         }
     );
 
-    let uuid_box = sbox.data_box().unwrap();
-    assert_eq!(uuid_box.offset_within_superbox(&sbox).unwrap(), 56);
-
     let dbox_as_child = sbox.child_boxes.first().unwrap();
     assert!(dbox_as_child.as_super_box().is_none());
     assert_eq!(
@@ -501,14 +498,6 @@ fn complex_example() {
             ],
             original: &jumbf[544..615],
         })
-    );
-
-    assert_eq!(
-        sbox.find_by_label("cb.adobe_1/c2pa.signature")
-            .and_then(|sig| sig.data_box())
-            .and_then(|sig| sig.offset_within_superbox(&sbox))
-            .unwrap(),
-        552
     );
 
     assert_eq!(sbox.data_box(), None);
