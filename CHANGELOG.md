@@ -6,6 +6,13 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 Since version 0.4.1, the format of this changelog is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.4.2](https://github.com/scouten-adobe/jumbf-rs/compare/v0.4.1...v0.4.2)
+_27 October 2024_
+
+### Fixed
+
+* Improve test coverage for `SuperBox` functions ([#23](https://github.com/scouten-adobe/jumbf-rs/pull/23))
+
 ## [0.4.1](https://github.com/scouten-adobe/jumbf-rs/compare/v0.4.0...v0.4.1)
 _28 September 2024_
 
