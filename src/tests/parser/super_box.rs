@@ -108,6 +108,79 @@ fn nested_super_boxes() {
 }
 
 #[test]
+fn child_superbox_without_label() {
+    let jumbf = hex!(
+        "00000058" // box size
+        "6a756d62" // box type = 'jumb'
+            "0000002f" // box size
+            "6a756d64" // box type = 'jumd'
+            "00000000000000000000000000000000" // UUID
+            "03" // toggles
+            "746573742e7375706572626f785f64617461626f7800" // label
+            // ------
+            "00000021" // box size
+            "6a756d62" // box type = 'jumb'
+                "00000019" // box size
+                "6a756d64" // box type = 'jumbd'
+                "00000000000000000000000000000000" // UUID
+                "00" // toggles
+    );
+
+    let (rem, sbox) = SuperBox::from_slice(&jumbf).unwrap();
+    assert!(rem.is_empty());
+
+    assert_eq!(
+        sbox,
+        SuperBox {
+            desc: DescriptionBox {
+                uuid: &[0; 16],
+                label: Some("test.superbox_databox"),
+                requestable: true,
+                id: None,
+                hash: None,
+                private: None,
+                original: &jumbf[8..55],
+            },
+            child_boxes: vec!(ChildBox::SuperBox(SuperBox {
+                desc: DescriptionBox {
+                    uuid: &[0; 16],
+                    label: None,
+                    requestable: false,
+                    id: None,
+                    hash: None,
+                    private: None,
+                    original: &jumbf[63..88],
+                },
+                child_boxes: vec!(),
+                original: &jumbf[55..88],
+            })),
+            original: &jumbf,
+        }
+    );
+
+    assert!(sbox.find_by_label("not_there").is_none());
+
+    let dbox_as_child = sbox.child_boxes.first().unwrap();
+    assert!(dbox_as_child.as_data_box().is_none());
+    assert_eq!(
+        dbox_as_child.as_super_box().unwrap(),
+        &SuperBox {
+            desc: DescriptionBox {
+                uuid: &[0; 16],
+                label: None,
+                requestable: false,
+                id: None,
+                hash: None,
+                private: None,
+                original: &jumbf[63..88],
+            },
+            child_boxes: vec!(),
+            original: &jumbf[55..88],
+        }
+    );
+}
+
+#[test]
 fn data_box_sample() {
     let jumbf = hex!(
     "00000077" // box size
@@ -154,6 +227,22 @@ fn data_box_sample() {
 
     let uuid_box = sbox.data_box().unwrap();
     assert_eq!(uuid_box.offset_within_superbox(&sbox).unwrap(), 56);
+
+    let dbox_as_child = sbox.child_boxes.first().unwrap();
+    assert!(dbox_as_child.as_super_box().is_none());
+    assert_eq!(
+        dbox_as_child.as_data_box().unwrap(),
+        &DataBox {
+            tbox: BoxType(*b"uuid"),
+            data: &[
+                99, 50, 99, 115, 0, 17, 0, 16, 128, 0, 0, 170, 0, 56, 155, 113, 116, 104, 105, 115,
+                32, 119, 111, 117, 108, 100, 32, 110, 111, 114, 109, 97, 108, 108, 121, 32, 98,
+                101, 32, 98, 105, 110, 97, 114, 121, 32, 115, 105, 103, 110, 97, 116, 117, 114,
+                101, 32, 100, 97, 116, 97, 46, 46, 46,
+            ],
+            original: &jumbf[48..119],
+        }
+    );
 }
 
 #[test]
