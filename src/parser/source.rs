@@ -33,29 +33,15 @@ pub trait Source: Debug + Sized {
     fn read_u8(&self) -> Result<(u8, Self), Self::Error>;
 
     fn read_be32(&self) -> Result<(u32, Self), Self::Error> {
-        let (be32, remainder) = self.split_at(4)?;
-
-        let mut res = 0u32;
-        let mut i = be32;
-
-        while let Ok((byte, x)) = i.read_u8() {
-            i = x;
-            res = (res << 8) + byte as u32;
-        }
-
-        Ok((res, remainder))
+        let mut b = [0u8; 4];
+        let remainder = self.read_bytes(&mut b)?;
+        Ok((u32::from_be_bytes(b), remainder))
     }
 
     fn read_be64(&self) -> Result<(u64, Self), Self::Error> {
         let mut b = [0u8; 8];
         let remainder = self.read_bytes(&mut b)?;
-
-        let mut res = 0u64;
-        for byte in b {
-            res = (res << 8) + byte as u64;
-        }
-
-        Ok((res, remainder))
+        Ok((u64::from_be_bytes(b), remainder))
     }
 
     fn split_at_null(&self) -> Result<(Self, Self), Self::Error> {
