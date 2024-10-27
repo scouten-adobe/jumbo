@@ -21,7 +21,11 @@ pub trait Source: Debug + Sized {
 
     fn read_bytes(&self, data: &mut [u8]) -> Result<Self, Self::Error>;
     fn as_bytes(&self) -> Result<Vec<u8>, Self::Error>;
+
     fn len(&self) -> usize;
+    fn is_empty(&self) -> bool {
+        self.len() == 0
+    }
 
     fn split_at(&self, len: usize) -> Result<(Self, Self), Self::Error>;
     fn offset_of_subsource(&self, subsource: &Self) -> Option<usize>;
