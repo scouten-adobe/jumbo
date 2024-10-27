@@ -11,19 +11,17 @@
 // specific language governing permissions and limitations under
 // each license.
 
-//! An efficient (zero-copy) parser for [JUMBF (ISO/IEC 19566-5:2019)]
-//! data structures.
-//!
-//! [JUMBF (ISO/IEC 19566-5:2019)]: https://www.iso.org/standard/73604.html
+use std::{
+    cell::RefCell,
+    io::{Read, Seek},
+};
 
-mod cow_source;
-mod data_box;
-mod description_box;
-mod error;
-mod super_box;
-
-pub use cow_source::CowSource;
-pub use data_box::DataBox;
-pub use description_box::DescriptionBox;
-pub use error::{Error, ParseResult};
-pub use super_box::{ChildBox, SuperBox};
+pub enum CowSource<'a, T: Read + Seek> {
+    Stream {
+        source: RefCell<T>,
+        start: usize,
+        len: usize,
+    },
+    Owned(Vec<u8>),
+    Borrowed(&'a [u8]),
+}
