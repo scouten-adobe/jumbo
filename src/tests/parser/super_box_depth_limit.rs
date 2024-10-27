@@ -118,8 +118,8 @@ fn depth_limit_0() {
             },
             child_boxes: vec!(ChildBox::DataBox(DataBox {
                 tbox: BoxType(*b"jumb"),
-                original: &JUMBF[38..615],
                 data: &JUMBF[46..615],
+                original: &JUMBF[38..615],
             })),
             original: &JUMBF,
         }
