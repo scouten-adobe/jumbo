@@ -204,8 +204,10 @@ impl<S: Source + Debug> Debug for SuperBox<S> {
     }
 }
 
+type DataBoxes<S> = Vec<DataBox<S>>;
+
 // Parse boxes from slice until source is empty.
-fn boxes_from_source<S: Source>(i: S) -> Result<(Vec<DataBox<S>>, S), Error<S::Error>> {
+fn boxes_from_source<S: Source>(i: S) -> Result<(DataBoxes<S>, S), Error<S::Error>> {
     let mut result: Vec<DataBox<S>> = vec![];
     let mut i = i;
 
